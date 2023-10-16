@@ -39,6 +39,10 @@ class Main{
 		for(int i=0;i<5;i++) {
 			arr[i] = i;
 		}
-		System.out.println(Solution.getLinkedList(arr).next.data);
+		SinglyLinkedListNode<Integer> current = Solution.getLinkedList(arr);
+		while(current!=null) {
+			System.out.println(current.data);
+			current = current.next;
+		}
 	}
 }
