@@ -38,7 +38,8 @@ class SinglyLinkedList{
     	while(iterator!=null) {
     		SinglyLinkedListNode<Integer> current = iterator;
 			iterator = iterator.next;
-    		if(i%2==0) {    			
+    		if(i%2==0) {
+    			//関数化できそう
     			SinglyLinkedListNode<Integer>  newNode = new SinglyLinkedListNode<>(current.data*2);
     			SinglyLinkedListNode<Integer> tmp = current.next;
     			current.next = newNode;
@@ -49,8 +50,28 @@ class SinglyLinkedList{
     	
     	return head;
     }
+    
+    //先頭にノードを挿入する
+    public SinglyLinkedListNode<Integer> insertAtHead(SinglyLinkedListNode<Integer> head, int data){
+    	SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(data);
+    	node.next = head;
+    	this.head = node;
+    	return this.head;
+    }
+    
+    //末尾にノードを挿入
+    public SinglyLinkedListNode<Integer> insertAtTail(SinglyLinkedListNode<Integer> head, int data){
+    	SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(data);
+    	SinglyLinkedListNode<Integer> current = head;
+    	while(current.next!=null) {
+    		current=current.next;
+    	}
+    	
+    	current.next = node;
+    	
+    	return head;
+    }
 }
-
 
 class Main{
 	public static void main(String[] args) {
@@ -58,12 +79,19 @@ class Main{
 		for(int i=0;i<5;i++) {
 			arr[i] = i;
 		}
-		 
-		
 		SinglyLinkedListNode<Integer> current = SinglyLinkedList.getLinkedList(arr);
+		SinglyLinkedList list = new SinglyLinkedList(current);
 		while(current!=null) {
 			System.out.println(current.data);
 			current = current.next;
 		}
+		SinglyLinkedListNode<Integer> newHead = list.insertAtHead(list.head, 100);
+		
+		current = newHead;
+		while(current!=null) {
+			System.out.println(current.data);
+			current = current.next;
+		}
+		
 	}
 }
