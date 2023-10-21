@@ -82,16 +82,7 @@ class SinglyLinkedList{
     	SinglyLinkedListNode<Integer> iterator2 = head2;
     	SinglyLinkedListNode<Integer> current = new SinglyLinkedListNode<>(null);
     	SinglyLinkedList list = new SinglyLinkedList(current);
-    	if(head1.data<=head2.data) {
-    		current.data=head1.data;
-    		iterator1=iterator1.next;
-    	}else {
-    		current.data=head2.data;
-    		iterator2=iterator2.next;
-    	}
-    	//各リストの先頭ノードを大小比較し、小さい方をソートずみリストの末尾に挿入。同じ場合は両方とも挿入
-    	//挿入した側のノードはnextをカレントノードとする
-    	//どちらかのカレントノードがnullになった場合、もう一方のノードを全てソートずみリストに追加	
+
     	while(iterator1!=null || iterator2!=null) {
     		if(iterator1==null) {
     			current.next=iterator2;
@@ -100,29 +91,19 @@ class SinglyLinkedList{
     			current.next=iterator1;
     			break;
     		}else {
-    			if(iterator1.data<iterator2.data) {
-    				SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(iterator1.data);
-    				current.next=node;
+    			if(iterator1.data<=iterator2.data) {
+    				current.next=iterator1;
     				current=current.next;
     				iterator1=iterator1.next;
-    			}else if(iterator1.data>iterator2.data) {
-    				SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(iterator2.data);
-    				current.next=node;
-    				current=current.next;
-    				iterator2=iterator2.next;
     			}else {
-    				SinglyLinkedListNode<Integer> node1 = new SinglyLinkedListNode<>(iterator1.data);
-    				SinglyLinkedListNode<Integer> node2 = new SinglyLinkedListNode<>(iterator2.data);
-    				current.next=node1;
-    				current.next.next=node2;
-    				current=current.next.next;
-    				iterator1=iterator1.next;
+    				current.next=iterator2;
+    				current=current.next;
     				iterator2=iterator2.next;
     			}
     		}
     	}
     	
-    	return list.head;
+    	return list.head.next;
     }
     
     public static SinglyLinkedListNode<Integer> removeNthNode(SinglyLinkedListNode<Integer> head, int n){
