@@ -160,6 +160,157 @@ class SinglyLinkedList{
     	
     	return iterator2;
     }
+    
+    public static int linkedListLength(SinglyLinkedListNode<Integer> head){
+        int len = 0;
+        SinglyLinkedListNode<Integer> iterator=head;
+        while(iterator!=null) {
+        	iterator=iterator.next;
+        	len++;
+        }
+        return len;
+    }
+    
+    public static int linkedListLastValue(SinglyLinkedListNode<Integer> head){
+        SinglyLinkedListNode<Integer> iterator = head;
+        while(iterator.next!=null) {
+        	iterator=iterator.next;
+        }
+        return iterator.data;
+    }
+    
+    
+    public static SinglyLinkedListNode<Integer> deleteTail(SinglyLinkedListNode<Integer> head){
+    	SinglyLinkedListNode<Integer> iterator = head;
+    	if(iterator.next==null) {
+    		head=null;
+    	}else {
+    		while(iterator.next.next!=null) {
+            	iterator=iterator.next;
+            }
+            iterator.next=null;
+    	}
+        return head;
+    }
+    
+    public static int findMinNum(SinglyLinkedListNode<Integer> head){
+        SinglyLinkedListNode<Integer> iterator = head;
+        int min = head.data;
+        int minIndex = 0;
+        iterator=iterator.next;
+        int idx = 1;
+        while(iterator!=null) {
+        	if(iterator.data <= min) {
+        		min=iterator.data;
+        		minIndex=idx;
+        	}
+        	iterator=iterator.next;
+        	idx++;
+        }
+        return minIndex;
+    }
+    
+    public static int linkedListSearch(SinglyLinkedListNode<Integer> head, int data){
+        SinglyLinkedListNode<Integer> iterator = head;
+        int idx=0;
+        while(iterator!=null) {
+        	if(iterator.data==data) {
+        		return idx;
+        	}
+        	iterator=iterator.next;
+        	idx++;
+        }
+        return -1;
+    }
+    
+    public static SinglyLinkedListNode<Integer> insertAtPosition(SinglyLinkedListNode<Integer> head, int position, int data){
+    	SinglyLinkedListNode<Integer> iterator = head;
+    	for(int i=0;i<position;i++) {
+    		if(iterator.next==null) return head;
+    		iterator=iterator.next;
+    	}
+    	SinglyLinkedListNode<Integer> newNode = new SinglyLinkedListNode<>(data);
+    	newNode.next=iterator.next;
+    	iterator.next=newNode;
+    	
+    	return head;
+    }
+    
+    public static SinglyLinkedListNode<Integer> insertNodeInSorted(SinglyLinkedListNode<Integer> head, int data){
+        SinglyLinkedListNode<Integer> iterator = head;
+        SinglyLinkedListNode<Integer> newNode = new SinglyLinkedListNode<>(data);
+        
+        if(iterator.data>data) {
+        	newNode.next=iterator;
+    		head=newNode;
+    		return head;
+        }
+        
+        while(iterator.next!=null) {
+        	if(iterator.data<=data && iterator.next.data>=data) {
+        		newNode.next=iterator.next;
+        		iterator.next=newNode;
+        		return head;
+        	}
+        	iterator=iterator.next;
+        }
+        
+    	iterator.next = newNode;
+    	return head;
+    }
+    public static int findMergeNode(SinglyLinkedListNode<Integer> headA, SinglyLinkedListNode<Integer> headB){
+        SinglyLinkedListNode<Integer> iterator1 = headA;
+        SinglyLinkedListNode<Integer> iterator2 = headB;
+        
+        while(iterator1!=null) {
+        	while(iterator2!=null){
+        		if(iterator1.data.equals(iterator2.data)) {
+        			SinglyLinkedListNode<Integer> candidate1=iterator1;
+        	        SinglyLinkedListNode<Integer> candidate2=iterator2;
+        	        boolean chk = true;
+        	        while(candidate1!=null && candidate2!=null) {
+        	    	   if(candidate1.data.equals(candidate2.data)) {
+           	        	candidate1=candidate1.next;
+           	        	candidate2=candidate2.next;
+           	        	}else {
+           	        		chk=false;
+           	        		break;
+           	        	}
+        	        }
+        	        if(chk && candidate1==null && candidate2==null) return iterator1.data;
+        	        
+                }
+        		iterator2=iterator2.next;
+        	}
+        	iterator1=iterator1.next;
+        	iterator2=headB;
+        }
+        return -1;
+    }
+    
+    public static SinglyLinkedListNode<Integer> reproduceByN(SinglyLinkedListNode<Integer> head, int n){
+        // 関数を完成させてください
+    	int len = linkedListLength(head);
+    	SinglyLinkedListNode<Integer> current=head;
+    	//currentを末尾まで移動
+    	while(current.next!=null) {
+    		current=current.next;
+    	}
+    	
+    	SinglyLinkedListNode<Integer> iterator=head;
+    	
+    	for(int i=0;i<n-1;i++) {
+    		for(int j=0;j<len;j++) {
+    			SinglyLinkedListNode<Integer> newNode = new SinglyLinkedListNode<>(iterator.data);
+    			current.next=newNode;
+    			current=current.next;
+    			iterator=iterator.next;
+    		}
+    		iterator=head;
+    	}
+    	return head;
+    }
+    
 }
 
 class Main{
