@@ -1,29 +1,18 @@
 package dataStructure;
-
-//リストのノード
-class SinglyLinkedListNode<E>{
-    public E data;
-    public SinglyLinkedListNode<E> next;
-
-    public SinglyLinkedListNode(E data){
-        this.data = data;
-        this.next = null;
-    }
-}
 //単方向リスト
 class SinglyLinkedList{
-    public SinglyLinkedListNode<Integer> head;
+    public Node<Integer> head;
 
-    public SinglyLinkedList(SinglyLinkedListNode<Integer> head){
+    public SinglyLinkedList(Node<Integer> head){
         this.head = head;
     }
     
-    public static SinglyLinkedListNode<Integer> getLinkedList(int[] arr){
+    public static Node<Integer> getLinkedList(int[] arr){
         // 関数を完成させてください
-    	SinglyLinkedListNode<Integer> current = new SinglyLinkedListNode<>(arr[0]);
+    	Node<Integer> current = new Node<>(arr[0]);
     	SinglyLinkedList list = new SinglyLinkedList(current);
         for(int i=1;i<arr.length;i++){
-        	SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(arr[i]);
+        	Node<Integer> node = new Node<>(arr[i]);
             current.next=node;
             current = current.next;      
         }
@@ -31,17 +20,17 @@ class SinglyLinkedList{
         return list.head;
     }
     //偶数番目のノードを2倍にして要素の後ろに追加する
-    public SinglyLinkedListNode<Integer> doubleEvenNumber(SinglyLinkedListNode<Integer> head){
+    public Node<Integer> doubleEvenNumber(Node<Integer> head){
     	
-    	SinglyLinkedListNode<Integer> iterator = head;
+    	Node<Integer> iterator = head;
     	int i=0;
     	while(iterator!=null) {
-    		SinglyLinkedListNode<Integer> current = iterator;
+    		Node<Integer> current = iterator;
 			iterator = iterator.next;
     		if(i%2==0) {
     			//関数化できそう
-    			SinglyLinkedListNode<Integer>  newNode = new SinglyLinkedListNode<>(current.data*2);
-    			SinglyLinkedListNode<Integer> tmp = current.next;
+    			Node<Integer>  newNode = new Node<>(current.data*2);
+    			Node<Integer> tmp = current.next;
     			current.next = newNode;
     			newNode.next = tmp;
     		}
@@ -52,17 +41,17 @@ class SinglyLinkedList{
     }
     
     //先頭にノードを挿入する
-    public SinglyLinkedListNode<Integer> insertAtHead(SinglyLinkedListNode<Integer> head, int data){
-    	SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(data);
+    public Node<Integer> insertAtHead(Node<Integer> head, int data){
+    	Node<Integer> node = new Node<>(data);
     	node.next = head;
     	this.head = node;
     	return this.head;
     }
     
     //末尾にノードを挿入
-    public SinglyLinkedListNode<Integer> insertAtTail(SinglyLinkedListNode<Integer> head, int data){
-    	SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(data);
-    	SinglyLinkedListNode<Integer> current = head;
+    public Node<Integer> insertAtTail(Node<Integer> head, int data){
+    	Node<Integer> node = new Node<>(data);
+    	Node<Integer> current = head;
     	while(current.next!=null) {
     		current=current.next;
     	}
@@ -72,15 +61,15 @@ class SinglyLinkedList{
     	return head;
     }
     
-    public void insertAtNext(SinglyLinkedListNode<Integer> current,int data){
-    	SinglyLinkedListNode<Integer> node = new SinglyLinkedListNode<>(data);
+    public void insertAtNext(Node<Integer> current,int data){
+    	Node<Integer> node = new Node<>(data);
     	current.next = node;
     }
     //ソートされた２つの片方向リストを連結させる
-    public static SinglyLinkedListNode<Integer> mergeTwoSortedLinkedLists(SinglyLinkedListNode<Integer> head1, SinglyLinkedListNode<Integer> head2){
-    	SinglyLinkedListNode<Integer> iterator1 = head1;
-    	SinglyLinkedListNode<Integer> iterator2 = head2;
-    	SinglyLinkedListNode<Integer> current = new SinglyLinkedListNode<>(null);
+    public static Node<Integer> mergeTwoSortedLinkedLists(Node<Integer> head1, Node<Integer> head2){
+    	Node<Integer> iterator1 = head1;
+    	Node<Integer> iterator2 = head2;
+    	Node<Integer> current = new Node<>(null);
     	SinglyLinkedList list = new SinglyLinkedList(current);
 
     	while(iterator1!=null || iterator2!=null) {
@@ -106,14 +95,14 @@ class SinglyLinkedList{
     	return list.head.next;
     }
     
-    public static SinglyLinkedListNode<Integer> removeNthNode(SinglyLinkedListNode<Integer> head, int n){
+    public static Node<Integer> removeNthNode(Node<Integer> head, int n){
     	if(n==0) return head;
     	
-    	SinglyLinkedListNode<Integer> dummyNode = new SinglyLinkedListNode<>(n);
+    	Node<Integer> dummyNode = new Node<>(n);
     	dummyNode.next = head;
     	
-    	SinglyLinkedListNode<Integer> fastIterator = dummyNode;
-    	SinglyLinkedListNode<Integer> slowIterator = dummyNode;
+    	Node<Integer> fastIterator = dummyNode;
+    	Node<Integer> slowIterator = dummyNode;
     	
     	for(int i=0;i<n;i++) {
     		if(fastIterator.next==null) return head;
@@ -128,11 +117,11 @@ class SinglyLinkedList{
     	
     	return dummyNode.next;
     }
-    public static SinglyLinkedListNode<Integer> reverseLinkedList(SinglyLinkedListNode<Integer> head){
+    public static Node<Integer> reverseLinkedList(Node<Integer> head){
     	//iteratorを定義
-    	SinglyLinkedListNode<Integer> iterator1 = head;
-    	SinglyLinkedListNode<Integer> iterator2 = null;
-    	SinglyLinkedListNode<Integer> iterator3 = null;;
+    	Node<Integer> iterator1 = head;
+    	Node<Integer> iterator2 = null;
+    	Node<Integer> iterator3 = null;;
     	//リスト長が1の場合はheadを返す
     	if(iterator1.next!=null) {
     		iterator2 = iterator1.next;
@@ -161,9 +150,9 @@ class SinglyLinkedList{
     	return iterator2;
     }
     
-    public static int linkedListLength(SinglyLinkedListNode<Integer> head){
+    public static int linkedListLength(Node<Integer> head){
         int len = 0;
-        SinglyLinkedListNode<Integer> iterator=head;
+        Node<Integer> iterator=head;
         while(iterator!=null) {
         	iterator=iterator.next;
         	len++;
@@ -171,8 +160,8 @@ class SinglyLinkedList{
         return len;
     }
     
-    public static int linkedListLastValue(SinglyLinkedListNode<Integer> head){
-        SinglyLinkedListNode<Integer> iterator = head;
+    public static int linkedListLastValue(Node<Integer> head){
+        Node<Integer> iterator = head;
         while(iterator.next!=null) {
         	iterator=iterator.next;
         }
@@ -180,8 +169,8 @@ class SinglyLinkedList{
     }
     
     
-    public static SinglyLinkedListNode<Integer> deleteTail(SinglyLinkedListNode<Integer> head){
-    	SinglyLinkedListNode<Integer> iterator = head;
+    public static Node<Integer> deleteTail(Node<Integer> head){
+    	Node<Integer> iterator = head;
     	if(iterator.next==null) {
     		head=null;
     	}else {
@@ -193,8 +182,8 @@ class SinglyLinkedList{
         return head;
     }
     
-    public static int findMinNum(SinglyLinkedListNode<Integer> head){
-        SinglyLinkedListNode<Integer> iterator = head;
+    public static int findMinNum(Node<Integer> head){
+        Node<Integer> iterator = head;
         int min = head.data;
         int minIndex = 0;
         iterator=iterator.next;
@@ -210,8 +199,8 @@ class SinglyLinkedList{
         return minIndex;
     }
     
-    public static int linkedListSearch(SinglyLinkedListNode<Integer> head, int data){
-        SinglyLinkedListNode<Integer> iterator = head;
+    public static int linkedListSearch(Node<Integer> head, int data){
+        Node<Integer> iterator = head;
         int idx=0;
         while(iterator!=null) {
         	if(iterator.data==data) {
@@ -223,22 +212,22 @@ class SinglyLinkedList{
         return -1;
     }
     
-    public static SinglyLinkedListNode<Integer> insertAtPosition(SinglyLinkedListNode<Integer> head, int position, int data){
-    	SinglyLinkedListNode<Integer> iterator = head;
+    public static Node<Integer> insertAtPosition(Node<Integer> head, int position, int data){
+    	Node<Integer> iterator = head;
     	for(int i=0;i<position;i++) {
     		if(iterator.next==null) return head;
     		iterator=iterator.next;
     	}
-    	SinglyLinkedListNode<Integer> newNode = new SinglyLinkedListNode<>(data);
+    	Node<Integer> newNode = new Node<>(data);
     	newNode.next=iterator.next;
     	iterator.next=newNode;
     	
     	return head;
     }
     
-    public static SinglyLinkedListNode<Integer> insertNodeInSorted(SinglyLinkedListNode<Integer> head, int data){
-        SinglyLinkedListNode<Integer> iterator = head;
-        SinglyLinkedListNode<Integer> newNode = new SinglyLinkedListNode<>(data);
+    public static Node<Integer> insertNodeInSorted(Node<Integer> head, int data){
+        Node<Integer> iterator = head;
+        Node<Integer> newNode = new Node<>(data);
         
         if(iterator.data>data) {
         	newNode.next=iterator;
@@ -258,15 +247,15 @@ class SinglyLinkedList{
     	iterator.next = newNode;
     	return head;
     }
-    public static int findMergeNode(SinglyLinkedListNode<Integer> headA, SinglyLinkedListNode<Integer> headB){
-        SinglyLinkedListNode<Integer> iterator1 = headA;
-        SinglyLinkedListNode<Integer> iterator2 = headB;
+    public static int findMergeNode(Node<Integer> headA, Node<Integer> headB){
+        Node<Integer> iterator1 = headA;
+        Node<Integer> iterator2 = headB;
         
         while(iterator1!=null) {
         	while(iterator2!=null){
         		if(iterator1.data.equals(iterator2.data)) {
-        			SinglyLinkedListNode<Integer> candidate1=iterator1;
-        	        SinglyLinkedListNode<Integer> candidate2=iterator2;
+        			Node<Integer> candidate1=iterator1;
+        	        Node<Integer> candidate2=iterator2;
         	        boolean chk = true;
         	        while(candidate1!=null && candidate2!=null) {
         	    	   if(candidate1.data.equals(candidate2.data)) {
@@ -288,20 +277,20 @@ class SinglyLinkedList{
         return -1;
     }
     
-    public static SinglyLinkedListNode<Integer> reproduceByN(SinglyLinkedListNode<Integer> head, int n){
+    public static Node<Integer> reproduceByN(Node<Integer> head, int n){
         // 関数を完成させてください
     	int len = linkedListLength(head);
-    	SinglyLinkedListNode<Integer> current=head;
+    	Node<Integer> current=head;
     	//currentを末尾まで移動
     	while(current.next!=null) {
     		current=current.next;
     	}
     	
-    	SinglyLinkedListNode<Integer> iterator=head;
+    	Node<Integer> iterator=head;
     	
     	for(int i=0;i<n-1;i++) {
     		for(int j=0;j<len;j++) {
-    			SinglyLinkedListNode<Integer> newNode = new SinglyLinkedListNode<>(iterator.data);
+    			Node<Integer> newNode = new Node<>(iterator.data);
     			current.next=newNode;
     			current=current.next;
     			iterator=iterator.next;
@@ -319,13 +308,13 @@ class Main{
 		for(int i=0;i<5;i++) {
 			arr[i] = i;
 		}
-		SinglyLinkedListNode<Integer> current = SinglyLinkedList.getLinkedList(arr);
+		Node<Integer> current = SinglyLinkedList.getLinkedList(arr);
 		SinglyLinkedList list = new SinglyLinkedList(current);
 		while(current!=null) {
 			System.out.println(current.data);
 			current = current.next;
 		}
-		SinglyLinkedListNode<Integer> newHead = list.insertAtHead(list.head, 100);
+		Node<Integer> newHead = list.insertAtHead(list.head, 100);
 		
 		current = newHead;
 		while(current!=null) {
