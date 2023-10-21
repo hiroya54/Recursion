@@ -128,6 +128,38 @@ class SinglyLinkedList{
     	
     	return dummyNode.next;
     }
+    public static SinglyLinkedListNode<Integer> reverseLinkedList(SinglyLinkedListNode<Integer> head){
+    	//iteratorを定義
+    	SinglyLinkedListNode<Integer> iterator1 = head;
+    	SinglyLinkedListNode<Integer> iterator2 = null;
+    	SinglyLinkedListNode<Integer> iterator3 = null;;
+    	//リスト長が1の場合はheadを返す
+    	if(iterator1.next!=null) {
+    		iterator2 = iterator1.next;
+    	}else {
+    		return head;
+    	}
+    	//リスト長が2の場合は要素を入れ替えて返す
+    	if(iterator2.next!=null) {
+    		iterator3=iterator2.next;
+    	}else {
+    		iterator2.next=iterator1;
+    		iterator1.next=null;
+    		return iterator2;
+    	}
+    	
+    	//逆向きに変換
+    	iterator1.next=null;
+    	while(iterator3!=null) {
+    		iterator2.next=iterator1;
+    		iterator1=iterator2;
+    		iterator2=iterator3;
+    		iterator3=iterator3.next;
+    	}
+    	iterator2.next=iterator1;
+    	
+    	return iterator2;
+    }
 }
 
 class Main{
