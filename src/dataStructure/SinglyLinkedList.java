@@ -125,17 +125,27 @@ class SinglyLinkedList{
     	return list.head;
     }
     
-    public static SinglyLinkedListNode<Integer> compareLargerNode(SinglyLinkedListNode<Integer> head1,SinglyLinkedListNode<Integer> head2){
-    	if(head1==null) {
-			//aがnullの場合
-    		return head2;
-		}else if(head2==null) {
-			//bがnullの場合
-			return head1;
-		}else {
-			//両方ともnullじゃない場合
-			return (head1.data>=head2.data)?  head1: head2;
-		}
+    public static SinglyLinkedListNode<Integer> removeNthNode(SinglyLinkedListNode<Integer> head, int n){
+    	if(n==0) return head;
+    	
+    	SinglyLinkedListNode<Integer> dummyNode = new SinglyLinkedListNode<>(n);
+    	dummyNode.next = head;
+    	
+    	SinglyLinkedListNode<Integer> fastIterator = dummyNode;
+    	SinglyLinkedListNode<Integer> slowIterator = dummyNode;
+    	
+    	for(int i=0;i<n;i++) {
+    		if(fastIterator.next==null) return head;
+    		fastIterator = fastIterator.next;
+    	}
+    	
+    	while(fastIterator.next!=null) {
+    		fastIterator=fastIterator.next;
+    		slowIterator=slowIterator.next;
+    	}
+    	slowIterator.next=slowIterator.next.next;
+    	
+    	return dummyNode.next;
     }
 }
 
