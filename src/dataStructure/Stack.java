@@ -2,33 +2,23 @@ package dataStructure;
 
 import java.util.ArrayList;
 
-class Item{
-    public int data;
-    public Item next;
-
-    public Item(int data){
-        this.data = data;
-        this.next = null;
-    }
-}
-
 class Stack {
 	
-	public Item head;
+	public Node<Integer> head;
 	
 	public Stack() {
 		this.head=null;
 	}
 	
 	public void push(int data) {
-		Item tmp = this.head;
-		this.head=new Item(data);
+		Node<Integer> tmp = this.head;
+		this.head=new Node<Integer>(data);
 		this.head.next=tmp;
 	}
 	
 	public Integer pop() {
 		if(this.head==null) return null;
-		Item tmp = this.head;
+		Node<Integer> tmp = this.head;
 		this.head=this.head.next;
 		return tmp.data;
 	}
