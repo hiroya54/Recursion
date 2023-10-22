@@ -1,4 +1,7 @@
 package dataStructure;
+
+import java.util.ArrayList;
+
 class Item{
     public int data;
     public Item next;
@@ -46,6 +49,51 @@ class Stack {
 		 }
 		 
 		 return res;
+	 }
+	 
+	 public static int[] consecutiveWalk(int[] arr) {
+		 
+		 if(arr.length==0) return new int[0];
+		 
+		 Stack stack = new Stack();	
+		 stack.push(arr[0]);
+		 for(int i=0;i<arr.length;i++) {
+			 if(stack.peek()>=arr[i]) {
+				 while(stack.pop()!=null);
+			 }
+			 stack.push(arr[i]);
+		 }
+		 
+		 ArrayList<Integer> resList = new ArrayList<>();
+		 
+		 while(stack.peek()!=null) {
+			 resList.add(stack.pop());
+		 }
+		 
+		 int[] res = new int[resList.size()];
+		 
+		 for(int i=0;i<res.length;i++) {
+			 res[i]=resList.get(i);
+		 }
+		 
+		 return res;
+	}
+	 
+	 public static int[] dailyStockPrice(int[] stocks) {
+		
+		 //stack使ったやり方にアップデートする
+		int[] res = new int[stocks.length];
+		for(int i=0;i<stocks.length;i++) {
+			for(int j=i+1;j<stocks.length;j++) {
+				if(stocks[i]<stocks[j]) {
+					res[i]=j-i;
+					break;
+				}
+			}
+		}
+		
+		return res;
+		 
 	 }
 	     
 }
