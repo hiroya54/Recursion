@@ -74,5 +74,18 @@ class Deque {
 		}
 
 	}
+	
+	public static int getMax(int[] arr){
+        Deque d = new Deque();
+        
+        d.enqueueFront(arr[0]);
+        
+        for(int i=1;i<arr.length;i++) {
+        	if(d.peekFront()<arr[i]) d.enqueueFront(arr[i]);
+        	else d.enqueueBack(arr[i]);
+        }
+        return d.peekFront();
+        
+    }
 
 }
