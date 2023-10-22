@@ -1,10 +1,10 @@
 package dataStructure;
-class Item{
+class DoublyLinkedListNode{
     int data;
-    Item prev;
-    Item next;
+    DoublyLinkedListNode prev;
+    DoublyLinkedListNode next;
 
-    public Item(int data){
+    public DoublyLinkedListNode(int data){
         this.data=data;
         this.prev=null;
         this.next=null;
@@ -12,13 +12,13 @@ class Item{
 }
 
 class DoublyLinkedList{
-    Item head;
-    Item tail;
+    DoublyLinkedListNode head;
+    DoublyLinkedListNode tail;
 
     public DoublyLinkedList(int[] arr){
-        Item iterator = null;
+        DoublyLinkedListNode iterator = null;
         for(int i=0;i<arr.length;i++){
-            Item node = new Item(arr[i]);
+            DoublyLinkedListNode node = new DoublyLinkedListNode(arr[i]);
 
             if(i==arr.length-1){
                 this.tail=node;
