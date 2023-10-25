@@ -1,35 +1,36 @@
 package dataStructure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-class Stack {
+class Stack<E> {
 	
-	public Node<Integer> head;
+	public Node<E> head;
 	
 	public Stack() {
 		this.head=null;
 	}
 	
-	public void push(int data) {
-		Node<Integer> tmp = this.head;
-		this.head=new Node<Integer>(data);
+	public void push(E data) {
+		Node<E> tmp = this.head;
+		this.head=new Node<E>(data);
 		this.head.next=tmp;
 	}
 	
-	public Integer pop() {
+	public E pop() {
 		if(this.head==null) return null;
-		Node<Integer> tmp = this.head;
+		Node<E> tmp = this.head;
 		this.head=this.head.next;
 		return tmp.data;
 	}
 	
-	public Integer peek() {	
+	public E peek() {	
 		return this.head==null ? null : this.head.data;
 	}
 	
 	 public static int[] reverse(int[] arr) {
 		 
-		 Stack stack = new Stack();
+		 Stack<Integer> stack = new Stack<>();
 		 for(int i=0;i<arr.length;i++) {
 			 stack.push(arr[i]);
 		 }
@@ -45,7 +46,7 @@ class Stack {
 		 
 		 if(arr.length==0) return new int[0];
 		 
-		 Stack stack = new Stack();	
+		 Stack<Integer> stack = new Stack<>();	
 		 stack.push(arr[0]);
 		 for(int i=0;i<arr.length;i++) {
 			 if(stack.peek()>=arr[i]) {
@@ -88,10 +89,10 @@ class Stack {
 	 
 	 public static String diceStreakGamble(int[] player1, int[] player2, int[] player3, int[] player4){
 	    
-	        Stack s1 =new Stack();
-	        Stack s2 =new Stack();
-	        Stack s3 =new Stack();
-	        Stack s4 =new Stack();
+	        Stack<Integer> s1 =new Stack<>();
+	        Stack<Integer> s2 =new Stack<>();
+	        Stack<Integer> s3 =new Stack<>();
+	        Stack<Integer> s4 =new Stack<>();
 
 	        int prize1 = s1.getPrize(player1,s1);
 	        int prize2 = s2.getPrize(player2,s2);
@@ -100,7 +101,7 @@ class Stack {
 	        
 	        int winnerIdx = 1;
 	        int winnerPrize = prize1;
-	        Stack winnerStack = s1;
+	        Stack<Integer> winnerStack = s1;
 	        if(winnerPrize<prize2){
 	            winnerIdx = 2;
 	            winnerPrize=prize2;
@@ -131,7 +132,7 @@ class Stack {
 	        return res;
 	    
 	    }
-	    public int getPrize(int[] player,Stack s){
+	    public int getPrize(int[] player,Stack<Integer> s){
 	        int len = player.length;
 	        s.push(player[len]);
 
@@ -147,6 +148,32 @@ class Stack {
 	         } 
 	         return prize;
 	    }
+	    
+	    public static boolean isParenthesesValid(String parentheses){
+	    	HashMap<Character, Character> map = new HashMap<>();
+	    	map.put(')', '(');
+	    	map.put('}', '{');
+	    	map.put(']', '[');
+	    	
+	    	Stack<Character> s = new Stack<>();
+	    	for(int i=0;i<parentheses.length();i++) {
+	    		//閉じる側じゃない括弧の場合はpushして次に進む
+	    		if(map.get(parentheses.charAt(i))==null) {
+	    			s.push(parentheses.charAt(i));
+	    			continue;
+	    		}else {
+	    			if(map.get(parentheses.charAt(i))==s.peek()) {
+	    				s.pop();
+	    			}else {
+	    				return false;
+	    			}
+	    		}
+	    	}
+            if(s.peek()!=null) return false;
+	    	else return true;
+	    }
+	    
+
 	     
 }
 
