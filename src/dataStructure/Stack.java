@@ -172,8 +172,7 @@ class Stack<E> {
             if(s.peek()!=null) return false;
 	    	else return true;
 	    }
-	    
-
+	   
 	     
 }
 
