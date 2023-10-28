@@ -1,6 +1,8 @@
 package dataStructure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class BinarySearchTree{
 	public BinaryTree<Integer> root;
@@ -56,7 +58,100 @@ class BinarySearchTree{
 		return false;
 	}
 	
+	public static int[] preorderTraversal(BinaryTree<Integer> root){
+        if(root==null) return new int[0];
+		
+        List<Integer> resList = new ArrayList<>();
+        preorderTraversalHelper(resList, root);
+        
+        int[] res = new int[resList.size()];
+        
+        for(int i=0;i<resList.size();i++) {
+        	res[i] = resList.get(i);
+        }
+		return res;
+    }
+	public static void preorderTraversalHelper(List<Integer> resList, BinaryTree<Integer> root) {
+		if(root==null) return;
+		resList.add(root.data);
+		preorderTraversalHelper(resList, root.left);
+		preorderTraversalHelper(resList, root.right);
+	}
 	
+	public static int[] inorderTraversal(BinaryTree<Integer> root){
+        if(root==null) return new int[0];
+		
+        List<Integer> resList = new ArrayList<>();
+        inorderTraversalHelper(resList, root);
+        
+        int[] res = new int[resList.size()];
+        
+        for(int i=0;i<resList.size();i++) {
+        	res[i] = resList.get(i);
+        }
+		return res;
+    }
+	public static void inorderTraversalHelper(List<Integer> resList, BinaryTree<Integer> root) {
+		if(root==null) return;
+		inorderTraversalHelper(resList, root.left);
+		resList.add(root.data);
+		inorderTraversalHelper(resList, root.right);
+	}
 	
+	public static int[] postorderTraversal(BinaryTree<Integer> root){
+        if(root==null) return new int[0];
+		
+        List<Integer> resList = new ArrayList<>();
+        postorderTraversalHelper(resList, root);
+        
+        int[] res = new int[resList.size()];
+        
+        for(int i=0;i<resList.size();i++) {
+        	res[i] = resList.get(i);
+        }
+		return res;
+    }
+	public static void postorderTraversalHelper(List<Integer> resList, BinaryTree<Integer> root) {
+		if(root==null) return;
+		postorderTraversalHelper(resList, root.left);
+		postorderTraversalHelper(resList, root.right);
+        resList.add(root.data);
+	}
+	
+	public static int[] reverseInorderTraversal(BinaryTree<Integer> root){
+        if(root==null) return new int[0];
+		
+        List<Integer> resList = new ArrayList<>();
+        reverseInorderTraversalHelper(resList, root);
+        
+        int[] res = new int[resList.size()];
+        
+        for(int i=0;i<resList.size();i++) {
+        	res[i] = resList.get(i);
+        }
+		return res;
+    }
+	public static void reverseInorderTraversalHelper(List<Integer> resList, BinaryTree<Integer> root) {
+		if(root==null) return;
+		reverseInorderTraversalHelper(resList, root.right);
+		resList.add(root.data);
+		reverseInorderTraversalHelper(resList, root.left);
+	}
+	
+	public static int maximumDepth(BinaryTree<Integer> root){
+		return maximumDepthHelper(root, 0);
+    }
+	
+	public static int maximumDepthHelper(BinaryTree<Integer> root, int depth) {
+		if(root==null) return depth;
+		
+		int leftDepth=depth;
+		if(root.left!=null) leftDepth=maximumDepthHelper(root.left, depth+1);
+		
+		int rightDepth=depth;
+		if(root.right!=null) rightDepth=maximumDepthHelper(root.right, depth+1);
+		
+		return Math.max(leftDepth, rightDepth);
+	}
 }
 
