@@ -78,8 +78,7 @@ class BinaryTree<E> {
         return iterator;
     }
 	
-public static BinaryTree<Integer> successor(BinaryTree<Integer> root, int key){
-        
+	public static BinaryTree<Integer> successor(BinaryTree<Integer> root, int key){    
         BinaryTree<Integer> iterator1=bstSearch(root, key);
 		BinaryTree<Integer> iterator2=root;
 		BinaryTree<Integer> minNode=null;
@@ -98,6 +97,59 @@ public static BinaryTree<Integer> successor(BinaryTree<Integer> root, int key){
 		}
         if(minNode==null || minNode.data<=key) return null;
 		return minNode;
+    }
+	
+	public static BinaryTree<Integer> predecessor(BinaryTree<Integer> root, int key){
+		
+		//引数のノードが存在しない場合と、二分木にkeyが存在しない場合はnullを返す
+        if(root==null || !keyExist(key, root)) return null;
+        
+        BinaryTree<Integer> target = bstSearch(root, key);
+        BinaryTree<Integer> predecessor = null;
+        BinaryTree<Integer> iterator = root;
+        //tagetに左部分木が存在する場合は、左部分木の最大値がpredecessorになる
+        if(target.left!=null) return maximumNode(target.left);
+        else {
+        	//左部分木が存在しない場合は、rootからtargetまでに通るノードの中で
+        	//条件を満たすノードがpredecessorになる
+        	while(iterator!=null) {
+       
+        		if(iterator.data==key) break;
+        		//iteratorの値がkeyより小さい場合、keyは右部分木にあるので右に移動する
+        		//右部分木に移動する場合はiteratorはpredecessorになりうる
+        		if(iterator.data<key) {
+        			predecessor=iterator;
+        			iterator=iterator.right;     			
+        		}else {
+        			//左部分木に移動する場合は
+        			iterator=iterator.left;
+        		}
+        	}
+        }
+        return predecessor;
+    }
+	
+	public static BinaryTree<Integer> sortedArrToBST(int[] numberList){
+        // 関数を完成させてください
+        int start = 0;
+        int end = numberList.length-1;
+        return sortedArrToBSTHelper(numberList,start,end);
+
+    }
+
+    public static BinaryTree<Integer> sortedArrToBSTHelper(int[] numberList,int start,int end){
+        if(start==end) return new BinaryTree<Integer>(numberList[start]);
+        
+        int mid = (int)Math.floor((end-start)/2);
+        BinaryTree<Integer> root = new BinaryTree<>(numberList[mid]);
+        BinaryTree<Integer> left =null;
+        BinaryTree<Integer> right=null;
+        root.left=left;
+        root.right=right;
+        if(mid-1>=start) left=sortedArrToBSTHelper(numberList,start,mid-1);
+        if(mid+1<=end) right=sortedArrToBSTHelper(numberList,mid+1,end);
+
+        return root;
     }
 
 	
