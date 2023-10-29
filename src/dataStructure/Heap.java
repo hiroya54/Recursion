@@ -32,6 +32,7 @@ class Heap {
 		}
 		
 	}
+	
 
 	public static int[] buildMaxHeap(int[] intArr){
         int middle = parent(intArr.length-1);
