@@ -58,6 +58,27 @@ class BinarySearchTree{
 		return false;
 	}
 	
+	
+	
+	public BinaryTree<Integer> findParent(BinaryTree<Integer> keyNode){
+		BinaryTree<Integer> iterator = this.root;
+		BinaryTree<Integer> parent = null;
+		while(iterator!=keyNode) {
+			parent = iterator;
+			iterator = (iterator.data>keyNode.data) ? iterator.left:iterator.right;
+		}
+		return parent;
+ 	}
+	
+	public static boolean keyExist(int key, BinaryTree<Integer> bst){
+        if(bst == null) return false;
+        if(bst.data == key) return true;
+
+        // 現在のノードよりキーが小さければ左に、大きければ右に辿ります。
+        if(bst.data > key) return keyExist(key, bst.left);
+        else return keyExist(key, bst.right);
+    }
+	
 	public static int[] preorderTraversal(BinaryTree<Integer> root){
         if(root==null) return new int[0];
 		
@@ -298,5 +319,250 @@ class BinarySearchTree{
 		else return false;
 		
     }
+	
+//	public BinaryTree<Integer> findSuccessor(BinaryTree<Integer> node){
+//	}
+//	
+//	public void deleteNode(int key){
+//		if(this.root==null || !keyExist(key)) return;
+//		
+//		BinaryTree<Integer> target = search(key);
+//		BinaryTree<Integer> parent = findParent(target);
+//		//targetが葉の場合
+//		if(target.left==null && target.right==null) {
+//			if(parent.left==target) parent.left=null;
+//			else parent.right=null;
+//		}	
+//		//targetの左部分木が存在しない場合
+//		else if(target.left==null && target.right!=null) {
+//			if(parent.left==target) parent.left=target.right;
+//			else parent.right=target.right;
+//		}
+//		//targetの右部分木が存在しない場合
+//		else if(target.left!=null && target.right==null) {
+//			if(parent.left==target) parent.left=target.left;
+//			else parent.right=target.left;
+//		}
+//		//targetの両部分木が存在する場合
+//		else {
+//			BinaryTree<Integer> successor= this.findSuccessor(target);
+//			BinaryTree<Integer> successorP = this.findParent(successor);
+//			//targetの子ノードがsuccessorの場合
+//			if(target==successorP) {
+//				successor.left=target.left;
+//				if(parent.left==target) parent.left=successor;
+//				else parent.right=successor;
+//			}
+//			//targetの子ノードがsuccessorじゃない場合
+//			else {
+//				//successorPの左部分木をsuccessorの右部分木にする
+//				successorP.left=successor.right;
+//				//targetをsuccessorに移植
+//				target.data=successor.data;
+//				
+//			}
+//			
+//		}
+//	}
+	
+	public static int minDepth(BinaryTree<Integer> root){
+        return minDepthHelper(root, 0);
+    }
+	
+	public static int minDepthHelper(BinaryTree<Integer> root,int depth) {
+		if(root.left==null && root.right==null) return depth;
+		int left=Integer.MAX_VALUE;
+		if(root.left!=null)  left=minDepthHelper(root.left, depth+1);
+		int right=Integer.MAX_VALUE;
+		if(root.right!=null) right=minDepthHelper(root.right, depth+1);
+		
+		return Math.min(left, right);
+	}
+	public static boolean hasGrandParent(BinaryTree<Integer> root) {
+		if(root==null) return false;
+		BinaryTree<Integer> left = root.left;
+		BinaryTree<Integer> right = root.right;
+		if(left!=null && (left.left!=null || left.right!=null)) return true;
+		if(right!=null && (right.left!=null || right.right!=null)) return true;
+		
+		return false;
+	}
+	public static int totalEvenGrandparent(BinaryTree<Integer> root){
+		return totalEvenGrandparentHelper(root);
+     }
+	
+	public static int totalEvenGrandparentHelper(BinaryTree<Integer> root) {
+		if(!hasGrandParent(root)) return 0;
+		int count=0;
+		int leftcount=0;
+		int rightcount=0;
+		if(root.data%2!=0) {
+			leftcount=totalEvenGrandparentHelper(root.left);
+			rightcount=totalEvenGrandparentHelper(root.right);
+		}else {
+			BinaryTree<Integer> left = root.left;
+			BinaryTree<Integer> right = root.right;
+			if(left!=null && left.left!=null) count+=left.left.data;
+			if(left!=null && left.right!=null) count+=left.right.data;
+			if(right!=null && right.left!=null) count+=right.left.data;
+			if(right!=null && right.right!=null) count+=right.right.data;
+			
+			leftcount=totalEvenGrandparentHelper(root.left);
+			rightcount=totalEvenGrandparentHelper(root.right);
+		}
+		return leftcount+rightcount+count;
+	}
+	
+	public static BinaryTree<Integer> bstInsert(BinaryTree<Integer> root, int key){
+		if(root==null || keyExist(key, root)) return root;
+		BinaryTree<Integer> iterator = root;
+		while(iterator.data!=key) {
+			if(iterator.left==null&&iterator.data>key)iterator.left=new BinaryTree<Integer>(key);
+			if(iterator.right==null&&iterator.data<key)iterator.right=new BinaryTree<Integer>(key);
+			if(iterator.data>key) iterator=iterator.left;
+			else iterator=iterator.right;
+		}
+		return root;
+    }
+	
+	public static boolean validateBST(BinaryTree<Integer> root){
+		if(root==null) return true;
+		boolean left=validateLeftBSTHelper(root, root.left);
+		boolean right=validateRightBSTHelper(root, root.right);
+		if(left&&right) return true;
+        else return false;
+		
+    }
+	
+	public static boolean validateLeftBSTHelper(BinaryTree<Integer> parent,BinaryTree<Integer> child) {
+		if(parent==null || (parent!=null && child==null)) return true;
+		if(parent.data<child.data) return false;
+		boolean left = true;
+		if(child.left!=null) {
+			if((parent.data<child.left.data) || child.data<child.left.data) return false;
+			left=validateLeftBSTHelper(child, child.left);
+		}
+		boolean right=true;
+		if(child.right!=null) {
+
+			if(parent.data<child.right.data || child.data>child.right.data) return false;
+			right=validateRightBSTHelper(child, child.right);
+		}
+		if(left&&right) return true;
+        else return false;
+	}
+	public static boolean validateRightBSTHelper(BinaryTree<Integer> parent,BinaryTree<Integer> child) {
+		if(parent==null || (parent!=null && child==null)) return true;
+		if(parent.data>child.data) return false;
+		
+		boolean left = true;
+		if(child.left!=null) {
+			if((parent.data>child.left.data) || child.data<child.left.data) return false;
+			left=validateLeftBSTHelper(child, child.left);
+		}
+		boolean right=true;
+		if(child.right!=null) {
+			if(parent.data>child.right.data || child.data>child.right.data) return false;
+			right=validateRightBSTHelper(child, child.right);
+		}
+		if(left&&right) return true;
+        else return false;
+	}
+	
+	public static boolean symmetricTree(BinaryTree<Integer> root){
+        if(root==null) return true;
+        if(root.left==null && root.right==null) return true;
+        ArrayList<BinaryTree<Integer>> left = inorderTraversalBT(root.left);
+        ArrayList<BinaryTree<Integer>> right = reverseInorderTraversalBT(root.right);
+        if(left.size()!=right.size()) return false;
+        
+        for(int i=0;i<left.size();i++) {
+        	if(left.get(i)==null && right.get(i)==null) continue;
+        	else if(left.get(i)==null || right.get(i)==null) return false;
+        	else {
+        		if(!left.get(i).data.equals(right.get(i).data)) return false;
+        	}
+        }
+        return true;
+    }
+
+   public static ArrayList<BinaryTree<Integer>> inorderTraversalBT(BinaryTree<Integer> root){
+		ArrayList<BinaryTree<Integer>> resList = new ArrayList<>();
+        inorderTraversalHelperBT(resList, root);
+		return resList;
+    }
+	public static void inorderTraversalHelperBT(ArrayList<BinaryTree<Integer>> resList, BinaryTree<Integer> root) {
+		if(root==null) {
+			resList.add(root);
+			return;
+		}
+        if(root.left==null && root.right==null) {
+            resList.add(root);
+            return;
+        }else{
+            inorderTraversalHelperBT(resList, root.left);
+            resList.add(root);
+		    inorderTraversalHelperBT(resList, root.right);
+        }
+	}
+
+    public static ArrayList<BinaryTree<Integer>> reverseInorderTraversalBT(BinaryTree<Integer> root){
+		ArrayList<BinaryTree<Integer>> resList = new ArrayList<>();
+        reverseInorderTraversalHelperBT(resList, root);
+		return resList;
+    }
+	public static void reverseInorderTraversalHelperBT(ArrayList<BinaryTree<Integer>> resList, BinaryTree<Integer> root) {
+		if(root==null) {
+			resList.add(root);
+			return;
+		}
+        if(root.left==null && root.right==null){
+            resList.add(root);
+            return;
+        }else{
+            reverseInorderTraversalHelperBT(resList, root.right);
+		    resList.add(root);
+		    reverseInorderTraversalHelperBT(resList, root.left);
+        }
+	}
+	
+	public static Integer[] levelOrderTraversal(BinaryTree<Integer> root){
+		Queue<BinaryTree<Integer>> p = new Queue<>();
+		ArrayList<BinaryTree<Integer>> list = new ArrayList<>();
+		list.add(root);
+		p.enqueue(root);
+		BinaryTree<Integer> current = null;
+		while(p.peekFront()!=null) {
+			current = p.dequeue();
+			if(current==null) continue;
+			if(current.left==null && current.right==null) continue;
+			list.add(current.left);
+			p.enqueue(current.left);
+			list.add(current.right);
+			p.enqueue(current.right);
+		}
+		int len = list.size()-1;
+		while(list.get(len)==null) {
+			list.remove(len);
+			len--;
+		}
+		
+		Integer[] res = new Integer[list.size()];
+		
+		for(int i=0;i<res.length;i++) {
+			if(list.get(i)==null) res[i]=null;
+			else res[i]=list.get(i).data;
+		}
+		return res;
+    }
+	public static void levelOrderTraversalHelper(Stack<BinaryTree<Integer>> s,ArrayList<BinaryTree<Integer>> list) {
+		BinaryTree<Integer> current = s.pop();
+		if(current==null) return;
+		list.add(current.left);
+		s.push(current.left);
+		list.add(current.right);
+		s.push(current.right);
+	}
+	
 }
 
