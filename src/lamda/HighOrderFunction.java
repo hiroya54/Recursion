@@ -52,6 +52,35 @@ class HighOrderFunction {
 		//5^10の計算
 		Supplier<Integer> function5 = () -> 5;
 		System.out.println(pPi(function5, 1, 10));
+		
+		//バリデーション(emailの構文チェック)	
+		BiFunction<Function<String, Boolean>, String, String> emailValidation = (f, str) -> {
+			if(f.apply(str)) return "Email is correct.";
+			else return "Email is not correct.";
+		};
+		
+		Function<String, Boolean> doesNotStartWithAt = email ->{
+			if(email.charAt(0)!='@') return true;
+			else return false;
+		};
+		System.out.println(emailValidation.apply(doesNotStartWithAt,"@gmail.com"));
+		System.out.println(emailValidation.apply(doesNotStartWithAt,"kkk@gmail.com"));
+		
+		Function<String, Boolean> doesNotHaveSpace = email -> {
+			String deleteSpaceString = email.replaceAll(" ", "");
+			if(email.length()==deleteSpaceString.length()) return true;
+			else return false;
+		};
+		System.out.println(emailValidation.apply(doesNotHaveSpace,"Hello world"));
+		System.out.println(emailValidation.apply(doesNotHaveSpace,"Helloworld"));
+		
+		Function<String, Boolean> hasUppercaseAndLowercase = email -> {
+			if(email.toUpperCase().equals(email) || email.toLowerCase().equals(email)) return false;
+			else return true;
+		};
+		System.out.println(emailValidation.apply(hasUppercaseAndLowercase,"hello world"));
+		System.out.println(emailValidation.apply(hasUppercaseAndLowercase,"HELLO WORLD"));
+		System.out.println(emailValidation.apply(hasUppercaseAndLowercase,"Hello world"));
 	}
 
 }
