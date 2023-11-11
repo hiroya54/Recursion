@@ -182,6 +182,23 @@ class HighOrderFunction {
 		getWeightOnMars.accept(70);
 		getWeightOnJupiter.accept(90);
 		
+		//連邦税と州税
+		Function<String, Consumer<Integer>> printTaxByState = state -> income -> {
+			double stateTax = 0;
+			if(state.equals("Arizona")) stateTax = 0.049;
+			else if(state.equals("California")) stateTax = 0.088;
+			else if(state.equals("Northcarolina")) stateTax = 0.025;
+			System.out.println("Federal Tax: " + (int)(income*0.21));
+			System.out.println(state +" State Tax: " + (int)(income*stateTax));
+			System.out.println("Tax Amount: " + (int)(income*(0.21+stateTax)));
+		};
+		Consumer<Integer>  getTaxInAZ = printTaxByState.apply("Arizona");
+		Consumer<Integer>  getTaxInCA = printTaxByState.apply("California");
+		Consumer<Integer>  getTaxInNC = printTaxByState.apply("Northcarolina");
+		getTaxInAZ.accept(400000);
+		getTaxInCA.accept(100000);
+		getTaxInNC.accept(500000);
+		
 	}
 
 }
