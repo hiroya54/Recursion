@@ -2,6 +2,7 @@ package lamda;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 class HighOrderFunction {
@@ -16,7 +17,14 @@ class HighOrderFunction {
 		if(b<a) return 0;
 		return g.get()+summation(g, a, b-1);
 	}
-	
+	//オーバーロード
+	public static int summation(Predicate<Integer> predicate,int n) {
+		int sum = 0;
+		for(int i=1;i<=n;i++) {
+			if(predicate.test(i)) sum+=i;
+		}
+		return sum;
+	}
 	public static int pPi(Function<Integer, Integer> g, int a, int b) {
 		if(b<a) return 1;
 		return g.apply(b)*pPi(g, a, b-1);
@@ -81,6 +89,82 @@ class HighOrderFunction {
 		System.out.println(emailValidation.apply(hasUppercaseAndLowercase,"hello world"));
 		System.out.println(emailValidation.apply(hasUppercaseAndLowercase,"HELLO WORLD"));
 		System.out.println(emailValidation.apply(hasUppercaseAndLowercase,"Hello world"));
+		
+		//動物と人間の年齢
+		BiFunction<Function<Integer, Integer>, Integer, Boolean> qualifiedForInsurance = (f,age) ->{
+			if(f.apply(age)<=60) return true;
+			return false;
+		};
+		
+		Function<Integer, Integer> dogToHuman  = age -> {
+			return 20 +(age-2)*7;
+		};
+		System.out.println(qualifiedForInsurance.apply(dogToHuman, 7));
+		System.out.println(qualifiedForInsurance.apply(dogToHuman, 8));
+		
+		Function<Integer, Integer> catToHuman = age -> {
+			return 24 + (age-2)*4;
+		};
+		System.out.println(qualifiedForInsurance.apply(catToHuman, 11));
+		System.out.println(qualifiedForInsurance.apply(catToHuman, 12));
+		
+		//ラムダ総和
+		BiFunction<Function<Integer, Boolean>, Integer, Integer> summation = (f,n) -> {
+			int sum = 0;
+			for(int i=1;i<=n;i++) {
+				if(f.apply(i)) sum+=i;
+			}
+			return sum;
+		};
+		
+		Function<Integer, Boolean> isOdd = n ->{
+			if(n%2!=0) return true;
+			else return false;
+		};	
+		System.out.println(summation.apply(isOdd, 3));
+		System.out.println(summation.apply(isOdd, 10));
+		System.out.println(summation.apply(isOdd, 25));
+		
+		Function<Integer, Boolean> isMultipleOf3Or5 = n ->{
+			if(n%3==0 || n%5==0) return true;
+			else return false;
+		};
+		System.out.println(summation.apply(isMultipleOf3Or5, 3));
+		System.out.println(summation.apply(isMultipleOf3Or5, 10));
+		System.out.println(summation.apply(isMultipleOf3Or5, 100));
+		
+		Function<Integer, Boolean> isPrime = n ->{
+			if(n==2) return true;
+			else if(n<2 || n%2==0) return false;
+			else {
+				for(int i=3;i<=Math.sqrt(n);i+=2) {
+					if(n%i==0) return false;
+				}
+				return true;
+			}
+		};
+		System.out.println(summation.apply(isPrime, 2));
+		System.out.println(summation.apply(isPrime, 10));
+		System.out.println(summation.apply(isPrime, 100));
+		
+		//ラムダ総和(Predicateを使用)
+		Predicate<Integer> odd = n -> n%2!=0;
+		Predicate<Integer> multipleOf3Or5 = n -> n%3==0 || n%5==0;
+		Predicate<Integer> prime = n->{
+			for(int i=2;i<=Math.sqrt(n);i++) {
+				if(n%i==0) return false;
+			}
+			return n>1;
+		};
+		System.out.println(summation(odd, 3));
+		System.out.println(summation(odd, 10));
+		System.out.println(summation(odd, 25));
+		System.out.println(summation(multipleOf3Or5, 3));
+		System.out.println(summation(multipleOf3Or5, 10));
+		System.out.println(summation(multipleOf3Or5, 100));
+		System.out.println(summation(prime, 2));
+		System.out.println(summation(prime, 10));
+		System.out.println(summation(prime, 100));
 	}
 
 }
