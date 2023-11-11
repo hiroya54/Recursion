@@ -1,6 +1,7 @@
 package lamda;
 
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -165,6 +166,22 @@ class HighOrderFunction {
 		System.out.println(summation(prime, 2));
 		System.out.println(summation(prime, 10));
 		System.out.println(summation(prime, 100));
+		
+		//惑星での体重
+		Function<String,  Consumer<Integer>> weightFormulaByPlanet = planet-> weight->{
+			double g = 0.0;
+			if(planet.equals("Earth")) g=9.8;
+			else if(planet.equals("Mars")) g=3.7;
+			else if(planet.equals("Jupiter")) g=24.8;
+			System.out.println("The weight on "+planet+ " is " + (int)(g*weight));
+		};
+		Consumer<Integer> getWeightOnEarth = weightFormulaByPlanet.apply("Earth");
+		Consumer<Integer> getWeightOnMars = weightFormulaByPlanet.apply("Mars");
+		Consumer<Integer> getWeightOnJupiter = weightFormulaByPlanet.apply("Jupiter");
+		getWeightOnEarth.accept(50);
+		getWeightOnMars.accept(70);
+		getWeightOnJupiter.accept(90);
+		
 	}
 
 }
