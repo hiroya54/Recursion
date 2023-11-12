@@ -199,6 +199,49 @@ class HighOrderFunction {
 		getTaxInCA.accept(100000);
 		getTaxInNC.accept(500000);
 		
+		//挨拶
+		Function<String, String> loud= name ->{
+			return name.toUpperCase();
+		};
+		Function<String, String> quiet = name ->{
+			return name.toLowerCase();
+		};
+		Function<String, String> reverse = name ->{
+			StringBuilder sb = new StringBuilder();
+			sb.append(name);
+			return sb.reverse().toString();
+		};
+		Function<String, String> repeat = name ->{
+			return name +" "+name;
+		};
+		
+		Callable greetingFn = new Greet();
+		System.out.println(greet(1,"john",loud,greetingFn));
+		System.out.println(greet(2,"john",quiet,greetingFn));
+		System.out.println(greet(13,"john",reverse,greetingFn));
+		System.out.println(greet(19,"john",repeat,greetingFn));
+		System.out.println(greet(13,"Leslie Emmanuel Beadon",loud,greetingFn));
+		System.out.println(greet(19,"Leslie Emmanuel Beadon",quiet,greetingFn));
+		System.out.println(greet(5,"Leslie Emmanuel Beadon",reverse,greetingFn));
+		System.out.println(greet(1,"Leslie Emmanuel Beadon",repeat,greetingFn));
+	}
+	
+	public static String greet(Integer time, String name,Function<String, String> f, Callable greetingF) {
+		return greetingF.greeting(time)+ " " + f.apply(name);
 	}
 
+}
+
+interface Callable{
+	public String greeting(Integer time) ;
+}
+class Greet implements Callable{
+	@Override
+	public String greeting(Integer time) {
+		String greet = "";
+		if(time>=0 && time<12)greet = "Good Morning";
+		else if(time>=12 && time<18) greet = "Good Afternoon";
+		else greet = "Good Eveneng";
+		return greet;
+	}
 }
