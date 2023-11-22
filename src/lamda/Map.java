@@ -65,4 +65,15 @@ class Map{
        return Arrays.stream(l).map(transrateM).filter(x -> x>=100).mapToDouble(x -> x.doubleValue()).toArray();
        
    }
+   public static String[] upper10mpsList(String[] pointsData){
+       Function <String ,String> velocity =  str ->{
+    	   int x1 = Integer.parseInt(str.substring(str.indexOf("-")+1,str.lastIndexOf("-")));
+    	   int x2 = Integer.parseInt(str.substring(0, str.indexOf("-")));
+    	   int s = Integer.parseInt(str.substring(str.lastIndexOf("-")+1,str.length()));
+    	   
+    	   return Integer.toString(Math.abs(x2-x1)/s);
+       };
+       
+       return Arrays.stream(pointsData).map(velocity).filter(x -> Integer.parseInt(x)>=10).toArray(String[]:: new);
+   }
 }
