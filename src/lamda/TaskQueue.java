@@ -1,5 +1,6 @@
 package lamda;
 
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 class TaskQueue {
@@ -42,6 +43,57 @@ class TaskQueue {
 		while(scheduler.taskExist()) {
 			scheduler.run();
 		}
+		
+		EventQueue myEventQueueSystem = new EventQueue();
+		
+		Supplier<String> math = () ->"You will study math today";
+		Supplier<String> music = () ->"You will study music today";
+		Supplier<String> squat = () ->"You will work out squat 6 times today";
+		Supplier<String> pushUp = () ->"You will work out squat 20 Push-up today";
+		
+		myEventQueueSystem.push("Study", math);
+		myEventQueueSystem.push("Study", music);
+		myEventQueueSystem.push("WorkOut", squat);
+		myEventQueueSystem.push("WorkOut", pushUp);
+		
+		myEventQueueSystem.dispatch("Study");
+		myEventQueueSystem.dispatch("Study");
+		myEventQueueSystem.dispatch("Study");
+		myEventQueueSystem.dispatch("WorkOut");
+		myEventQueueSystem.dispatch("WorkOut");
+		myEventQueueSystem.dispatch("Something");
+	}
+}
+
+class EventQueue{
+	HashMap<String, Queue> queues;
+	
+	public EventQueue() {
+		this.queues = new HashMap<>();
+	}
+	
+	void push(String event, Supplier<String> task) {
+		if(queues.containsKey(event)) {
+			queues.get(event).enqueue(task);
+		}else {
+			queues.put(event, new Queue());
+			queues.get(event).enqueue(task);
+		}
+	}
+	
+	boolean eventExists(String event) {
+		if(queues.containsKey(event) && queues.get(event).peekFront()!=null) return true;
+		else return false;
+	}
+	
+	void run(String event) {
+		if(eventExists(event)) {
+			System.out.println(queues.get(event).peekFront().get());		
+		}
+	}
+	void dispatch(String event) {
+		if(eventExists(event)) System.out.println(queues.get(event).dequeue().get());
+		else System.out.println("Event is none!");
 	}
 }
 
