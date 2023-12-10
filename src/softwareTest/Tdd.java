@@ -26,6 +26,10 @@ class Student{
         }
         return studentList[minIdx];
     }
+    
+    public String toString(){
+        return "ID: " + this.studentId + "..." + this.name + ", grade: " + this.grade + ", age: " + this.age + ", height " + this.height;
+    }
 
 }
 
