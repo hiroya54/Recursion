@@ -5,8 +5,12 @@ const config ={
 }
 
 let brands = {"cpu":[], "gpu":[], "ram":[], "hdd":[], "ssd":[] }
+let candidateItems = {"cpu":{}, "gpu":{}, "ram":{}, "storage":{}}
 
 class Viewer{
+
+    static count = 0;
+
     static displayInitialPage(){
 
         let container = document.createElement("div");
@@ -77,6 +81,7 @@ class Viewer{
         brandContainer.addEventListener("change", function(){
 
             Controller.initializeOption(modelContainer);
+            candidateItems["cpu"] = {};
             Controller.fetchAndAddModel("cpu", container);
 
         })
@@ -107,6 +112,7 @@ class Viewer{
         brandContainer.addEventListener("change", function(){
 
             Controller.initializeOption(modelContainer);
+            candidateItems["gpu"] = {};
             Controller.fetchAndAddModel("gpu", container)
 
         })
@@ -146,14 +152,17 @@ class Viewer{
   
             Controller.initializeOption(brandContainer);
             Controller.initializeOption(modelContainer);
+            candidateItems["ram"] = {};
             Controller.setBrandOption("ram", brandContainer)
     
         })
         brandContainer.addEventListener("change", function(){
 
             Controller.initializeOption(modelContainer);
+            candidateItems["ram"] = {};
             Controller.fetchAndAddModel("ram", container);
         })
+
         return container;
     }
 
@@ -193,6 +202,7 @@ class Viewer{
             Controller.initializeOption(storageSizeContainer);
             Controller.initializeOption(brandContainer);
             Controller.initializeOption(modelContainer);
+            candidateItems["storage"] = {};
 
             if(storageTypeContainer.value !== "-"){
                 Controller.setStorageSize(container);
@@ -205,6 +215,8 @@ class Viewer{
             let type = storageTypeContainer.value;
             Controller.initializeOption(brandContainer);
             Controller.initializeOption(modelContainer);
+            candidateItems["storage"] = {};
+
             if(storageSizeContainer.value != "-"){
                 Controller.setBrandOption(type, brandContainer);
             }
@@ -214,13 +226,12 @@ class Viewer{
         brandContainer.addEventListener("change", function(){
             let type = storageTypeContainer.value;
             Controller.initializeOption(modelContainer);
-
+            candidateItems["storage"] = {};
             if(brandContainer.value != "-"){
                 Controller.fetchAndAddModel(type, container);
             }
 
         })
-
 
         return container;
     }
@@ -232,8 +243,75 @@ class Viewer{
         `
         <button class="my-3 ml-3 btn btn-primary col-2" type="submit" id="addPc">Add PC</button>
         `
+        container.querySelectorAll("#addPc")[0].addEventListener("click", function(){
+
+            let isFilled = true;
+            for(let type in candidateItems){
+
+                if(Object.keys(candidateItems[type]).length === 0){
+                    alert("Please fill in all forms.");
+                    isFilled = false;
+                    break;
+                }
+            }
+
+            if(isFilled){
+                // 計算処理
+                config.target.querySelectorAll("#displayPc")[0].append(Viewer.displayBuiltPcPage());
+            }
+        })
+        return container;
+    }
+
+    static displayBuiltPcPage(){
+
+        Viewer.count += 1;
+
+        let brandContainers = config.target.querySelectorAll("#selectBrand");
+        let modelContainers = config.target.querySelectorAll("#selectModel");
+        let storageType = config.target.querySelectorAll("#selectStorageType")[0].value.toUpperCase();
+        let storageSize = config.target.querySelectorAll("#selectStorageSize")[0].value;
+
+        let gamingScore = Controller.calculateGamingScore();
+        let workScore = Controller.calculateWorkScore();
+        
+        let container = document.createElement("div");
+        container.classList.add("bg-primary","text-white", "m-2", "col-12");
+        container.innerHTML =
+        `
+        <div class="m-2 pt-3 d-flex justify-content-center">
+            <h1>Your PC${Viewer.count}</h1>
+        </div>
+        <div class="m-2 pt-3 d-flex flex-column">
+            <h1>CPU</h1>
+            <h5>Brand: ${brandContainers[0].value}</h5>
+            <h5>Model: ${modelContainers[0].value}</h5>
+        </div>
+        <div class="m-2 pt-3 d-flex flex-column">
+            <h1>GPU</h1>
+            <h5>Brand: ${brandContainers[1].value}</h5>
+            <h5>Model: ${modelContainers[1].value}</h5>
+        </div>
+        <div class="m-2 pt-3 d-flex flex-column">
+            <h1>RAM</h1>
+            <h5>Brand: ${brandContainers[2].value}</h5>
+            <h5>Model: ${modelContainers[2].value}</h5>
+        </div>
+        <div class="m-2 pt-3 d-flex flex-column">
+            <h1>Storage</h1>
+            <h5>Disk: ${storageType}</h5>
+            <h5>Storage: ${storageSize}</h5>
+            <h5>Brand: ${brandContainers[3].value}</h5>
+            <h5>Model: ${modelContainers[3].value}</h5>
+        </div>
+        <div class="m-2 pt-3 d-flex justify-content-around align-items-center">
+            <h1>Gaming: ${gamingScore}%</h1>
+            <h1>Work: ${workScore}%</h1>
+        </div>
+        `
 
         return container;
+
     }
 
 }
@@ -262,7 +340,11 @@ class Controller{
             }else if(type == "hdd" || type == "ssd"){
                 let size = container.querySelectorAll("#selectStorageSize")[0].value;
                 items = items.filter(item => item.Model.includes(size))
+                type ="storage"
             }
+            // 可能性のあるModelがitemsに格納されている。
+            // これを有効活用したい
+            // モデル名をキー、ベンチマークを値として候補をすべて格納しておく？
 
             for(let i=0;i<items.length;i++){
                 let model = items[i].Model;
@@ -270,6 +352,8 @@ class Controller{
                 newOption.value = model;
                 newOption.text = model;
                 modelContainer.appendChild(newOption);
+
+                if(candidateItems[type][model] === undefined) candidateItems[type][model] = items[i].Benchmark;
             }
         })
     }
@@ -365,6 +449,41 @@ class Controller{
         let defaultOption = document.createElement("option")
         defaultOption.text = "-";
         return defaultOption 
+    }
+
+    static setSelectedItems(type, container){
+        let model = container.querySelectorAll("#selectModel")[0].value;
+
+        fetch(config.url + type).then(response => response.json()).then(data => {
+
+            let selectedItem = data.filter(item => item.Model == model);
+
+            selectedItems[type] = selectedItem;
+        })
+    }
+
+    static calculateGamingScore(){
+
+        let cpuModel = config.target.querySelectorAll("#selectModel")[0].value;
+        let gpuModel = config.target.querySelectorAll("#selectModel")[1].value;
+        let ramModel = config.target.querySelectorAll("#selectModel")[2].value;
+        let storageModel = config.target.querySelectorAll("#selectModel")[3].value;
+   
+        return Math.floor(candidateItems["cpu"][cpuModel]*0.25 + candidateItems["gpu"][gpuModel]*0.6 
+                + candidateItems["ram"][ramModel]*0.125 + candidateItems["storage"][storageModel]*0.025);
+
+
+    }
+
+    static calculateWorkScore(){
+        let cpuModel = config.target.querySelectorAll("#selectModel")[0].value;
+        let gpuModel = config.target.querySelectorAll("#selectModel")[1].value;
+        let ramModel = config.target.querySelectorAll("#selectModel")[2].value;
+        let storageModel = config.target.querySelectorAll("#selectModel")[3].value;
+
+        return Math.floor(candidateItems["cpu"][cpuModel]*0.6 + candidateItems["gpu"][gpuModel]*0.25
+                + candidateItems["ram"][ramModel]*0.1 + candidateItems["storage"][storageModel]*0.05);
+
     }
 
 }
