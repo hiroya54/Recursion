@@ -4,31 +4,24 @@ const config ={
     url : "https://api.recursionist.io/builder/computers?type="
 }
 
-const brands = {
-    "cpu":["Intel", "AMD"],
-    "gpu":["Nvidia","AMD","Zotac","Asus","MSI","Gigabyte",
-            "EVGA","Sapphire","PowerColor","XFX","ASRock","Gainward","PNY","PwrHis"],
-    "ram":["G.SKILL","Crucial","Corsair","HyperX"],
-    "hdd":["WD","HGST","Seagate","Toshiba","Hitachi"],
-    "ssd":["Intel","Samsung","Sabrent","Corsair","Gigabyte",
-            "HP","Crucial","WD","Adata","SanDisk","Mushkin","Seagate","XPG","Plextor","Nvme","Zotac"]
-}
+let brands = {"cpu":[], "gpu":[], "ram":[], "hdd":[], "ssd":[] }
 
 class Viewer{
     static displayInitialPage(){
+
         let container = document.createElement("div");
         container.classList.add("bg-white");
         config.target.append(container);
 
         container.append(this.displayHeader())
         container.append(this.displayStep(1))
-        container.append(this.displayCpuSelecter());
+        container.append(this.displayCpuSelection());
         container.append(this.displayStep(2))
-        container.append(this.displayGpuSelecter());
+        container.append(this.displayGpuSelection());
         container.append(this.displayStep(3))
-        container.append(this.displayMemorySelecter());
+        container.append(this.displayMemorySelection());
         container.append(this.displayStep(4))
-        container.append(this.displayStorageSelecter());
+        container.append(this.displayStorageSelection());
         container.append(this.displayBtn());
 
         let displayPcDiv = document.createElement("div");
@@ -60,7 +53,7 @@ class Viewer{
         return container;
     }
 
-    static displayCpuSelecter(){
+    static displayCpuSelection(){
         let container = document.createElement("div");
         container.classList.add("d-flex", "justify-content-start", "flex-column", "mx-3")
         let htmlString =
@@ -78,9 +71,12 @@ class Viewer{
         container.innerHTML = htmlString;
 
         let brandContainer = container.querySelectorAll("#selectBrand")[0];
-        this.setBrandOption("cpu", brandContainer);
+        let modelContainer = container.querySelectorAll("#selectModel")[0];
+
+        Controller.setBrandOption("cpu", brandContainer);
         brandContainer.addEventListener("change", function(){
 
+            Controller.initializeOption(modelContainer);
             Controller.fetchAndAddModel("cpu", container);
 
         })
@@ -88,7 +84,7 @@ class Viewer{
         return container;
     }
 
-    static displayGpuSelecter(){
+    static displayGpuSelection(){
         let container = document.createElement("div");
         container.classList.add("d-flex", "justify-content-start", "flex-column", "mx-3")
         let htmlString =
@@ -105,9 +101,12 @@ class Viewer{
         container.innerHTML = htmlString;
 
         let brandContainer = container.querySelectorAll("#selectBrand")[0];
-        this.setBrandOption("gpu", brandContainer)
+        let modelContainer = container.querySelectorAll("#selectModel")[0];
+
+        Controller.setBrandOption("gpu", brandContainer)
         brandContainer.addEventListener("change", function(){
 
+            Controller.initializeOption(modelContainer);
             Controller.fetchAndAddModel("gpu", container)
 
         })
@@ -115,7 +114,7 @@ class Viewer{
         return container;
     }
 
-    static displayMemorySelecter(){
+    static displayMemorySelection(){
         let container = document.createElement("div");
         container.classList.add("d-flex", "justify-content-start", "flex-column", "mx-3")
         let htmlString =
@@ -141,19 +140,24 @@ class Viewer{
 
         let ramNumContainer = container.querySelectorAll("#selectHowMany")[0];
         let brandContainer = container.querySelectorAll("#selectBrand")[0];
+        let modelContainer = container.querySelectorAll("#selectModel")[0];
+
         ramNumContainer.addEventListener("change", function(){
-            brandContainer.innerHTML = "";
-            brandContainer.appendChild(Viewer.setDefaultOption())
-            Viewer.setBrandOption("ram", brandContainer)
+  
+            Controller.initializeOption(brandContainer);
+            Controller.initializeOption(modelContainer);
+            Controller.setBrandOption("ram", brandContainer)
     
         })
         brandContainer.addEventListener("change", function(){
+
+            Controller.initializeOption(modelContainer);
             Controller.fetchAndAddModel("ram", container);
         })
         return container;
     }
 
-    static displayStorageSelecter(){
+    static displayStorageSelection(){
         let container = document.createElement("div");
         container.classList.add("d-flex", "justify-content-start", "flex-column", "mx-3")
         let htmlString =
@@ -161,11 +165,11 @@ class Viewer{
         <h5>HDD or SSD</h5>
         <select id="selectStorageType" class="col-9 pl-1">
             <option>-</option>
-            <option value="hhd">HDD</option>
+            <option value="hdd">HDD</option>
             <option value="ssd">SSD</option>
         </select>
         <h5>Storage</h5>
-        <select id="selectStrageSize" class="col-9 pl-1">
+        <select id="selectStorageSize" class="col-9 pl-1">
             <option>-</option>
         </select>
         <h5>Brand</h5>
@@ -180,9 +184,41 @@ class Viewer{
         container.innerHTML = htmlString;
 
         let storageTypeContainer = container.querySelectorAll("#selectStorageType")[0];
+        let storageSizeContainer = container.querySelectorAll("#selectStorageSize")[0];
+        let brandContainer = container.querySelectorAll("#selectBrand")[0];
+        let modelContainer = container.querySelectorAll("#selectModel")[0];
+
         storageTypeContainer.addEventListener("change", function(){
 
-            Viewer.setStorageSize();
+            Controller.initializeOption(storageSizeContainer);
+            Controller.initializeOption(brandContainer);
+            Controller.initializeOption(modelContainer);
+
+            if(storageTypeContainer.value !== "-"){
+                Controller.setStorageSize(container);
+            }
+
+        })
+
+        storageSizeContainer.addEventListener("change", function(){
+
+            let type = storageTypeContainer.value;
+            Controller.initializeOption(brandContainer);
+            Controller.initializeOption(modelContainer);
+            if(storageSizeContainer.value != "-"){
+                Controller.setBrandOption(type, brandContainer);
+            }
+            
+        })
+
+        brandContainer.addEventListener("change", function(){
+            let type = storageTypeContainer.value;
+            Controller.initializeOption(modelContainer);
+
+            if(brandContainer.value != "-"){
+                Controller.fetchAndAddModel(type, container);
+            }
+
         })
 
 
@@ -200,51 +236,34 @@ class Viewer{
         return container;
     }
 
-    static setBrandOption(type, container){
-        for(let i=0; i<brands[type].length; i++){
-            let brand = brands[type][i];
-            let newOption = document.createElement("option");
-            newOption.value = brand;
-            newOption.text = brand;
-            container.append(newOption)
-        }
-    }
-
-    static setDefaultOption(){
-        let defaultOption = document.createElement("option")
-        defaultOption.text = "-";
-        return defaultOption 
-    }
-
-    static setStorageSize(){
-
-    }
 }
 
 class Controller{
+
     static fetchAndAddModel(type, container){
         let brandContainer = container.querySelectorAll("#selectBrand")[0];
+        let brand = brandContainer.value;
         let modelContainer = container.querySelectorAll("#selectModel")[0];
+
         let items = [];
         fetch(config.url + type).then(response => response.json()).then(function(data){
-            for(let i=0; i<brands[type].length;i++){
-                let brand = brands[type][i]
-                if (brand != brandContainer.value) continue;
-                items = data.filter(item => item.Brand == brand);
-            }
+            items = data.filter(item => item.Brand == brand);
             if(type == "ram"){
                 let slotNum = container.querySelectorAll("#selectHowMany")[0].value;
-                items = items.filter(function(item){
-                    let lastSpaceIndex = item.Model.lastIndexOf(" ");
-                    let lastXIndex = item.Model.lastIndexOf("x");
+                items = items.filter(item =>{
 
-                    return item.Model.substring(lastSpaceIndex+1, lastXIndex) == slotNum
+                    // モデル名から容量を抽出
+                    // TBのメモリはないけど念のため
+                    let match = item.Model.match(/(\d+)x(\d+(GB|TB))/)
+                    return match && match[1] == slotNum;
+
                 })
-                console.log(items)
+
+            }else if(type == "hdd" || type == "ssd"){
+                let size = container.querySelectorAll("#selectStorageSize")[0].value;
+                items = items.filter(item => item.Model.includes(size))
             }
 
-            modelContainer.innerHTML = "";
-            modelContainer.appendChild(Viewer.setDefaultOption())
             for(let i=0;i<items.length;i++){
                 let model = items[i].Model;
                 let newOption = document.createElement("option");
@@ -253,6 +272,99 @@ class Controller{
                 modelContainer.appendChild(newOption);
             }
         })
+    }
+
+    static setBrandOption(type, brandContainer){
+        // 初回アクセス時にbrandsにブランド名を格納する。
+        // ２回目以降はbrandsに格納されたブランド名を参照する。
+        if(brands[type].length == 0){
+
+            let brand = [];
+            fetch(config.url + type).then(response => response.json()).then(data =>{
+                data.forEach(item =>{
+                    brand.push(item.Brand)
+                })
+                // 重複排除
+                brand = [... new Set(brand)];
+
+                // brandsに格納
+                brand.forEach(brandName =>{
+                    brands[type].push(brandName);
+                })
+
+                Controller.setOption(brandContainer, brands[type]);
+            })
+        }else{
+
+            Controller.setOption(brandContainer, brands[type]);
+
+        }
+        
+    }
+
+    static setStorageSize(container){
+
+        let storageTypeContainer = container.querySelectorAll("#selectStorageType")[0];
+        let storageType = storageTypeContainer.value;
+        let storageSizeContainer = container.querySelectorAll("#selectStorageSize")[0];
+
+        let capacities = [];
+
+        fetch(config.url + storageType.toLowerCase()).then(response => response.json()).then(data =>{
+            
+            // 容量を配列に格納
+            data.forEach(item => {
+                let model = item.Model;
+                let match = model.match(/\d+TB|\d+GB/);
+                if(match){
+                    capacities .push(match[0]);
+                }
+                
+            });
+
+            // セットに格納することで、重複を排除
+            let uniqueCapacities = [... new Set(capacities)];
+
+            // 単位を揃えた上で比較を行い、降順に並べ替え
+            uniqueCapacities.sort((a,b) => {
+                let numA = Controller.convertToGB(a);
+                let numB = Controller.convertToGB(b);
+                return numB - numA;
+            })
+
+            // optionに追加
+            Controller.setOption(storageSizeContainer, uniqueCapacities);
+        })
+    
+    }
+
+    static setOption(selectContainer, items){
+        for(let i=0; i< items.length;i++){
+            let newOption = document.createElement("option");
+            newOption.value = items[i];
+            newOption.text = items[i];
+            selectContainer.appendChild(newOption);
+        }
+    }
+
+    static convertToGB(capacity){
+        let value = parseInt(capacity);
+        if(capacity.includes("TB")){
+            return value*1000;
+        }
+        return value;
+    }
+
+    static initializeOption(container){
+        container.innerHTML = "";
+        container.appendChild(Controller.setDefaultOption());
+    }
+
+
+    static setDefaultOption(){
+        let defaultOption = document.createElement("option")
+        defaultOption.text = "-";
+        return defaultOption 
     }
 
 }
