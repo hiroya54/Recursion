@@ -1,5 +1,7 @@
 <?php
 
+namespace Persons;
+
 abstract class Person{
     protected String $name;
     protected int $age;
