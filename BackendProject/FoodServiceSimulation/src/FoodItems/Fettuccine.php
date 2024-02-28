@@ -1,7 +1,6 @@
 <?php
 
 namespace FoodItems;
-use FoodItems\FoodItem;
 
 class Fettuccine extends FoodItem{
     const CATEGORY = "Fettuccine";

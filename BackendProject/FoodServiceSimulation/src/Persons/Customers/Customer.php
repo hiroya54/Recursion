@@ -1,6 +1,7 @@
 <?php
 
 namespace Persons\Customers;
+
 use Persons\Person;
 use Restaurants\Restaurant;
 use Invoices\Invoice;
@@ -35,14 +36,19 @@ class Customer extends Person{
     public function order(Restaurant $restaurant):invoice{
         echo "Welcome to our restaurant! Here is our menu: \n";
         foreach($restaurant->getMenu() as $foodItem){
-            echo "* " . $foodItem -> getName() . " " . $foodItem -> getPrice() . "\n";
+            echo "* " . $foodItem -> getName() . ": " . $foodItem -> getPrice() . " yen\n";
         }
         echo "What would you like to order? \n\n";
         $orderList = $this->interestedCategories($restaurant);
+        $orderCounts = [];
+        foreach($orderList as $foodItem){
+            $foodCategory = $foodItem -> getCategory();
+            $orderCounts[$foodCategory] = $this -> interestedTasteMap[$foodCategory];
+        }
         
         echo "\n";
         echo "OK! Please wait while we prepare your order. \n\n";
-        $invoice = $restaurant -> order($orderList, $this -> interestedTasteMap);
+        $invoice = $restaurant -> order($orderList, $orderCounts);
         
         return $invoice;
     }

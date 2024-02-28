@@ -2,8 +2,6 @@
 
 namespace FoodItems;
 
-use FoodItems\FoodItem;
-
 class HawaiianPizza extends FoodItem{
     const CATEGORY = "HawaiianPizza";
 

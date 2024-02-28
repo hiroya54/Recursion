@@ -1,6 +1,6 @@
 <?php
+
 namespace FoodItems;
-use FoodItems\FoodItem;
 
 class Spaghetti extends FoodItem{
     const CATEGORY = "Spaghetti";

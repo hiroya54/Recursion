@@ -1,6 +1,5 @@
 <?php
 
-
 namespace FoodItems;
 
 class CheeseBurger extends FoodItem{

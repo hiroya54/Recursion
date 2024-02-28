@@ -17,10 +17,9 @@ $interestedTasteMap = [
     "CheeseBurger"=> 2,
     "Fettuccine"=> 3,
     "HawaiianPizza"=> 2,
-    "Spaghetti"=> 3
+    "Spaghetti"=> 1
 ];
 
 $customer = new Persons\Customers\Customer("John", 25, "Bacoor", $interestedTasteMap);
 
 $invoice = $customer->order($saizeriya);
-echo "customer paid the invoice. \n";

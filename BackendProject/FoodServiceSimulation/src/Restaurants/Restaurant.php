@@ -18,18 +18,18 @@ class Restaurant{
         $this->employees = $employees;
     }
 
-    public function order(array $orderList, array $interestedTasteMap): invoice{
+    public function order(array $orderList, array $orderCounts): invoice{
 
         foreach($this->employees as $employee){
             if($employee instanceof Cashier){
-                $foodOrder = $employee -> generateOrder($orderList);
+                $foodOrder = $employee -> generateOrder($orderList, $orderCounts);
                 echo "Casher has generated the order. \n\n";
             }
         }
         
         foreach($this->employees as $employee){
             if($employee instanceof Chef){
-                echo $employee->prepareFood($foodOrder , $interestedTasteMap);
+                echo $employee->prepareFood($foodOrder);
             }
         }
         echo "\n";
@@ -38,7 +38,7 @@ class Restaurant{
         echo "Customer has finished eating. \n\n";
         foreach($this->employees as $employee){
             if($employee instanceof Cashier){
-                $invoice = $employee->generateInvoice($foodOrder, $interestedTasteMap);
+                $invoice = $employee->generateInvoice($foodOrder);
             }
         }
         echo "Here is your invoice: \n";

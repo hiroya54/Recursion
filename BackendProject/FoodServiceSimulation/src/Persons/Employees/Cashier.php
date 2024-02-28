@@ -10,15 +10,16 @@ class Cashier extends Employee{
         parent::__construct($name, $age, $address, $employeeId, $salary);
     }
 
-    public function generateOrder(array $orderList): FoodOrder{
-        $foodOrder = new FoodOrder($orderList, date("D M d, Y G:i"));
+    public function generateOrder(array $orderList, array $orderCounts): FoodOrder{
+        $foodOrder = new FoodOrder($orderList, $orderCounts, date("D M d, Y G:i"));
         return $foodOrder;
     }
 
-    public function generateInvoice(FoodOrder $foodOrder, array $interestedTasteMap):invoice{
+    public function generateInvoice(FoodOrder $foodOrder):invoice{
         $total = 0;
+        $orderCounts = $foodOrder -> getFoodOrderCounts();
         foreach($foodOrder -> getfoodOrderList() as $foodItem){
-            $total += $foodItem->getPrice() * $interestedTasteMap[$foodItem -> getCategory()];
+            $total += $foodItem->getPrice() * $orderCounts[$foodItem -> getCategory()];
         }
         $invoice = new Invoice($total, $foodOrder -> getOrderTime(), date("D M d, Y G:i"));
         return $invoice;

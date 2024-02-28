@@ -2,7 +2,6 @@
 
 namespace Persons\Employees;
 
-use Persons\Employees\Employee;
 use FoodOrders\FoodOrder;
 
 class Chef extends Employee{
@@ -11,10 +10,10 @@ class Chef extends Employee{
         parent::__construct($name, $age, $address, $employeeId, $salary);
     }
 
-    public function prepareFood(FoodOrder $foodOrder, array $interestedTasteMap): String{
+    public function prepareFood(FoodOrder $foodOrder): String{
         $res = "";
         foreach($foodOrder -> getfoodOrderList() as $foodItem){
-            $i = $interestedTasteMap[$foodItem -> getCategory()];
+            $i = $foodOrder -> getFoodOrderCounts()[$foodItem -> getCategory()];
             for($j = 0; $j < $i; $j++){
                 $res .= "Chef has prepared ".$foodItem -> getName() . "\n";
             }

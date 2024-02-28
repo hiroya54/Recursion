@@ -5,10 +5,12 @@ use FoodItems\FoodItem;
 
 class FoodOrder{
     protected array $foodOrderList;
+    protected array $foodOrderCount;
     protected string $orderTime;
 
-    public function __construct(array $foodOrderList, string $orderTime){
+    public function __construct(array $foodOrderList, array $foodOrderCount, string $orderTime){
         $this->foodOrderList = $foodOrderList;
+        $this->foodOrderCount = $foodOrderCount;
         $this->orderTime = $orderTime;
     }
 
@@ -20,6 +22,15 @@ class FoodOrder{
     public function getfoodOrderList(): array
     {
         return $this->foodOrderList;
+    }
+
+    /**
+     * Get the counts of the items in the food order.
+     *
+     * @return array
+     */
+    public function getfoodOrderCounts(): array{
+        return $this->foodOrderCount;
     }
 
     /**
