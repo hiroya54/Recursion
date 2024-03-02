@@ -1,3 +1,14 @@
+<?php
+
+spl_autoload_extensions('.php');
+spl_autoload_register();
+
+require_once "vendor/autoload.php";
+
+$restaurantChains = Helpers\RandomGenerator::restaurantChains();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,88 +19,12 @@
     
 </head>
 <body>
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <h1 class="text-center mt-4">Restaurant Chain XXX</h1>
-        <div class="border col-10 px-0 pb-2">
-            <div class="bg-light border col-12">
-                <p class="m-0 py-2">Restaurant Chain Infomation</p>
-            </div>
-            <div class="mx-2 mb-0 mt-2 border-bottom">
-                <details>
-                    <summary class="bg-lightblue text-primary p-2">Restaurant Location1</summary>
-                    <div class="mb-2">
-                        <div class="mx-4">
-                            <p class="border-bottom mb-2 py-2">Restaurant Name: Restaurant XXX</p>
-                        <div>
-                        <h5>Employees:</h5>
-                        <div class="border">
-                            <p class="m-0 p-2">Employee1</p>
-                        </div>
-                        <div class="border">
-                            <p class="m-0 p-2">Employee2</p>
-                        </div>
-                    </div>
-                </details>
-            </div>
-            <div class="mx-2 mb-0 border-bottom">
-                <details>
-                    <summary class="bg-lightblue text-primary p-2">Restaurant Location2</summary>
-                        <div class="mb-2">
-                            <div class="mx-4">
-                                <p class="border-bottom mb-2 py-2">Restaurant Name: Restaurant XXX</p>
-                            <div>
-                            <h5>Employees:</h5>
-                            <div class="border">
-                                <p class="m-0 p-2">Employee1</p>
-                            </div>
-                            <div class="border">
-                                <p class="m-0 p-2">Employee2</p>
-                            </div>
-                        </div>
-                </details>
-            </div>
-        </div>
-        <h1 class="text-center mt-4">Restaurant Chain XXX</h1>
-        <div class="border col-10 px-0 pb-2">
-            <div class="bg-light border col-12">
-                <p class="m-0 py-2">Restaurant Chain Infomation</p>
-            </div>
-            <div class="mx-2 mb-0 mt-2 border-bottom">
-                <details>
-                    <summary class="bg-lightblue text-primary p-2">Restaurant Location1</summary>
-                    <div class="mb-2">
-                        <div class="mx-4">
-                            <p class="border-bottom mb-2 py-2">Restaurant Name: Restaurant XXX</p>
-                        <div>
-                        <h5>Employees:</h5>
-                        <div class="border">
-                            <p class="m-0 p-2">Employee1</p>
-                        </div>
-                        <div class="border">
-                            <p class="m-0 p-2">Employee2</p>
-                        </div>
-                    </div>
-                </details>
-            </div>
-            <div class="mx-2 mb-0 border-bottom">
-                <details>
-                    <summary class="bg-lightblue text-primary p-2">Restaurant Location2</summary>
-                        <div class="mb-2">
-                            <div class="mx-4">
-                                <p class="border-bottom mb-2 py-2">Restaurant Name: Restaurant XXX</p>
-                            <div>
-                            <h5>Employees:</h5>
-                            <div class="border">
-                                <p class="m-0 p-2">Employee1</p>
-                            </div>
-                            <div class="border">
-                                <p class="m-0 p-2">Employee2</p>
-                            </div>
-                        </div>
-                </details>
-            </div>
-        </div>
+    <div class="d-flex flex-column align-items-center justify-content-center mb-5">
+        <!-- restaurantchainのtoHTML使う -->
+        <?php foreach($restaurantChains as $restaurantChain): ?>
+            <?php $html = $restaurantChain->toHTML(); ?>
+            <?php echo $html ?>
+        <?php endforeach; ?>
     </div>  
-
 </body>
 </html>

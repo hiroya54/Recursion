@@ -1,3 +1,9 @@
+body{
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', Times, serif!important;
+    letter-spacing: 0.03em!important;
+}
+
 .bg-lightblue {
     background-color: rgba(0, 123, 255, 0.5); /* bg-primaryの色に透明度を設定 */
   }
