@@ -5,7 +5,17 @@ spl_autoload_register();
 
 require_once "vendor/autoload.php";
 
-$restaurantChains = Helpers\RandomGenerator::restaurantChains();
+$minNumOfRestaurantChains = $_POST["minNumOfRestaurantChains"] ?? 1;
+$maxNumOfRestaurantChains = $_POST["maxNumOfRestaurantChains"] ?? 3;
+$minNumOfRestaurantLocations = $_POST["minNumOfRestaurantLocations"] ?? 1;
+$maxNumOfRestaurantLocations = $_POST["maxNumOfRestaurantLocations"] ?? 3;
+$minNumOfEmployees = $_POST["minNumOfEmployees"] ?? 1;
+$maxNumOfEmployees = $_POST["maxNumOfEmployees"] ?? 3;
+
+$restaurantChains = \Helpers\RandomGenerator::restaurantChains(
+    $minNumOfRestaurantChains, $maxNumOfRestaurantChains,
+    $minNumOfRestaurantLocations, $maxNumOfRestaurantLocations,
+    $minNumOfEmployees, $maxNumOfEmployees);
 
 ?>
 
@@ -20,10 +30,8 @@ $restaurantChains = Helpers\RandomGenerator::restaurantChains();
 </head>
 <body>
     <div class="d-flex flex-column align-items-center justify-content-center mb-5">
-        <!-- restaurantchainのtoHTML使う -->
         <?php foreach($restaurantChains as $restaurantChain): ?>
-            <?php $html = $restaurantChain->toHTML(); ?>
-            <?php echo $html ?>
+            <?php echo $restaurantChain->toHTML(); ?>
         <?php endforeach; ?>
     </div>  
 </body>
