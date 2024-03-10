@@ -5,12 +5,16 @@ spl_autoload_register();
 
 use Database\MySQLWrapper;
 
-$opts = getopt("",["migrate"]);
-if(isset($opts["migrate"])){
+$opts = getopt("",["create","alter"]);
+if(isset($opts["create"])){
     printf("Database migration enabled.".PHP_EOL);
     include("Database/setup.php");
     printf('Database migration ended.'.PHP_EOL);
-}
+}elseif(isset($opts["alter"])){
+    printf("Database alteration enabled.".PHP_EOL);
+    include("Database/alter.php");
+    printf('Database alteration ended.'.PHP_EOL);
+};
 
 $mysqli = new MySQLWrapper();
 
