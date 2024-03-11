@@ -8,7 +8,7 @@ use Helpers\Settings;
 use Database\MySQLWrapper;
 use Exception;
 
-class DbWipe extends AbstractCommand{
+class DBWipe extends AbstractCommand{
     protected static ?string $alias = 'db-wipe';
     protected static bool $requiredCommandValue = false;
     private static string $mysqlPath = "/Applications/MAMP/Library/bin/";
