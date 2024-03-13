@@ -118,6 +118,7 @@ class BookSearch extends AbstractCommand{
         // 一度fetchして$mapにデータを格納し、それを使って表示する
         $map = $result->fetch_assoc();
         $this->showBookInfo($map, $isbn);
+        
         return 0;
 
     }

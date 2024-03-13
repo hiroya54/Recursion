@@ -16,6 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `CacheBookSearch`
+--
+
+DROP TABLE IF EXISTS `CacheBookSearch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CacheBookSearch` (
+  `key` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `CacheBookSearch`
+--
+
+LOCK TABLES `CacheBookSearch` WRITE;
+/*!40000 ALTER TABLE `CacheBookSearch` DISABLE KEYS */;
+INSERT INTO `CacheBookSearch` VALUES ('ISBN-4566014134','{\"ISBN:4566014134\": {\"bib_key\": \"ISBN:4566014134\", \"info_url\": \"https://openlibrary.org/books/OL35326784M/Subarashiki_tosan_gitsune\", \"preview\": \"borrow\", \"preview_url\": \"https://archive.org/details/subarashikitosan0000unse\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12143357-S.jpg\"}}','2024-03-11 10:26:25','2024-03-11 10:57:41'),('ISBN-9681907191','{\"ISBN:9681907191\": {\"bib_key\": \"ISBN:9681907191\", \"info_url\": \"https://openlibrary.org/books/OL22927024M/El_superzorro\", \"preview\": \"borrow\", \"preview_url\": \"https://archive.org/details/elsuperzorro0000dahl\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12997000-S.jpg\"}}','2024-03-11 09:59:58','2024-03-11 10:24:52'),('ISBN-9780140328721','{\"ISBN:9780140328721\": {\"bib_key\": \"ISBN:9780140328721\", \"info_url\": \"https://openlibrary.org/books/OL7353617M/Fantastic_Mr._Fox\", \"preview\": \"restricted\", \"preview_url\": \"https://archive.org/details/fantasticmrfoxpu00roal\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/8739161-S.jpg\"}}','2024-03-11 09:59:01','2024-03-11 10:29:51'),('ISBN-9784566014138','{\"ISBN:9784566014138\": {\"bib_key\": \"ISBN:9784566014138\", \"info_url\": \"https://openlibrary.org/books/OL35326784M/Subarashiki_tosan_gitsune\", \"preview\": \"borrow\", \"preview_url\": \"https://archive.org/details/subarashikitosan0000unse\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12143357-S.jpg\"}}','2024-03-11 10:26:43','2024-03-11 10:27:25'),('ISBN-9788416839032','{\"ISBN:9788416839032\": {\"bib_key\": \"ISBN:9788416839032\", \"info_url\": \"https://openlibrary.org/books/OL39486879M/A_zer_azeria\", \"preview\": \"restricted\", \"preview_url\": \"https://archive.org/details/zerazeria0000dahl\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12894981-S.jpg\"}}','2024-03-11 10:59:31','2024-03-11 11:33:11');
+/*!40000 ALTER TABLE `CacheBookSearch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Category`
 --
 
@@ -270,4 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-10 18:00:32
+-- Dump completed on 2024-03-13 15:59:55
