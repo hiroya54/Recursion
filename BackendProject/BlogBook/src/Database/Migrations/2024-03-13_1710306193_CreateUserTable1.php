@@ -10,8 +10,8 @@ class CreateUserTable1 implements SchemaMigration
     {
         // マイグレーションロジックをここに追加してください
         return [
-            "CREATE TABLE users (
-                id BIGINT PRIMARY KEY AUTO_INCREMENT,
+            "CREATE TABLE User (
+                userId BIGINT PRIMARY KEY AUTO_INCREMENT,
                 username VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL,
@@ -26,7 +26,7 @@ class CreateUserTable1 implements SchemaMigration
     {
         // ロールバックロジックを追加してください
         return [
-            "DROP TABLE users"
+            "DROP TABLE User"
         ];
     }
 }

@@ -11,14 +11,14 @@ class CreatePostTable1 implements SchemaMigration
         // マイグレーションロジックをここに追加してください
         // ON DELETE CASCADE: 親テーブルの行が削除されたとき、それに関連する子テーブルの行も削除される
         return [
-            "CREATE TABLE posts (
-                id INT PRIMARY KEY AUTO_INCREMENT,
+            "CREATE TABLE Post (
+                postId INT PRIMARY KEY AUTO_INCREMENT,
                 title VARCHAR(255) NOT NULL,
                 content TEXT NOT NULL,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                user_id BIGINT,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                userId BIGINT,
+                FOREIGN KEY (userId) REFERENCES User(userId) ON DELETE CASCADE
             )"
         ];
     }
@@ -27,7 +27,7 @@ class CreatePostTable1 implements SchemaMigration
     {
         // ロールバックロジックを追加してください
         return [
-            "DROP TABLE posts"
+            "DROP TABLE Post"
         ];
     }
 }
