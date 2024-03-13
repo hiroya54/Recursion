@@ -16,32 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `CacheBookSearch`
---
-
-DROP TABLE IF EXISTS `CacheBookSearch`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `CacheBookSearch` (
-  `key` varchar(255) NOT NULL,
-  `value` text NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `CacheBookSearch`
---
-
-LOCK TABLES `CacheBookSearch` WRITE;
-/*!40000 ALTER TABLE `CacheBookSearch` DISABLE KEYS */;
-INSERT INTO `CacheBookSearch` VALUES ('ISBN-4566014134','{\"ISBN:4566014134\": {\"bib_key\": \"ISBN:4566014134\", \"info_url\": \"https://openlibrary.org/books/OL35326784M/Subarashiki_tosan_gitsune\", \"preview\": \"borrow\", \"preview_url\": \"https://archive.org/details/subarashikitosan0000unse\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12143357-S.jpg\"}}','2024-03-11 10:26:25','2024-03-11 10:57:41'),('ISBN-9681907191','{\"ISBN:9681907191\": {\"bib_key\": \"ISBN:9681907191\", \"info_url\": \"https://openlibrary.org/books/OL22927024M/El_superzorro\", \"preview\": \"borrow\", \"preview_url\": \"https://archive.org/details/elsuperzorro0000dahl\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12997000-S.jpg\"}}','2024-03-11 09:59:58','2024-03-11 10:24:52'),('ISBN-9780140328721','{\"ISBN:9780140328721\": {\"bib_key\": \"ISBN:9780140328721\", \"info_url\": \"https://openlibrary.org/books/OL7353617M/Fantastic_Mr._Fox\", \"preview\": \"restricted\", \"preview_url\": \"https://archive.org/details/fantasticmrfoxpu00roal\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/8739161-S.jpg\"}}','2024-03-11 09:59:01','2024-03-11 10:29:51'),('ISBN-9784566014138','{\"ISBN:9784566014138\": {\"bib_key\": \"ISBN:9784566014138\", \"info_url\": \"https://openlibrary.org/books/OL35326784M/Subarashiki_tosan_gitsune\", \"preview\": \"borrow\", \"preview_url\": \"https://archive.org/details/subarashikitosan0000unse\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12143357-S.jpg\"}}','2024-03-11 10:26:43','2024-03-11 10:27:25'),('ISBN-9788416839032','{\"ISBN:9788416839032\": {\"bib_key\": \"ISBN:9788416839032\", \"info_url\": \"https://openlibrary.org/books/OL39486879M/A_zer_azeria\", \"preview\": \"restricted\", \"preview_url\": \"https://archive.org/details/zerazeria0000dahl\", \"thumbnail_url\": \"https://covers.openlibrary.org/b/id/12894981-S.jpg\"}}','2024-03-11 10:59:31','2024-03-11 11:33:11');
-/*!40000 ALTER TABLE `CacheBookSearch` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `Category`
 --
 
@@ -76,13 +50,13 @@ CREATE TABLE `Comment` (
   `commentText` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `userId` int(11) DEFAULT NULL,
+  `userId` bigint(20) DEFAULT NULL,
   `postId` int(11) DEFAULT NULL,
   PRIMARY KEY (`commentId`),
   KEY `userId` (`userId`),
   KEY `postId` (`postId`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userID`),
-  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`)
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userId`) ON DELETE CASCADE,
+  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,32 +70,6 @@ LOCK TABLES `Comment` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `CommentLike`
---
-
-DROP TABLE IF EXISTS `CommentLike`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `CommentLike` (
-  `userID` int(11) NOT NULL,
-  `commentId` int(11) NOT NULL,
-  PRIMARY KEY (`userID`,`commentId`),
-  KEY `commentId` (`commentId`),
-  CONSTRAINT `commentlike_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `User` (`userID`),
-  CONSTRAINT `commentlike_ibfk_2` FOREIGN KEY (`commentId`) REFERENCES `Comment` (`commentId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `CommentLike`
---
-
-LOCK TABLES `CommentLike` WRITE;
-/*!40000 ALTER TABLE `CommentLike` DISABLE KEYS */;
-/*!40000 ALTER TABLE `CommentLike` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `Post`
 --
 
@@ -130,17 +78,14 @@ DROP TABLE IF EXISTS `Post`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Post` (
   `postId` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `content` text,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `userId` int(11) DEFAULT NULL,
-  `CategoryId` int(11) DEFAULT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `userId` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`postId`),
   KEY `userId` (`userId`),
-  KEY `CategoryId` (`CategoryId`),
-  CONSTRAINT `post_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userID`),
-  CONSTRAINT `post_ibfk_2` FOREIGN KEY (`CategoryId`) REFERENCES `Category` (`categoryId`)
+  CONSTRAINT `post_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -161,12 +106,12 @@ DROP TABLE IF EXISTS `PostLike`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `PostLike` (
-  `userID` int(11) NOT NULL,
+  `userId` bigint(20) NOT NULL,
   `postId` int(11) NOT NULL,
-  PRIMARY KEY (`userID`,`postId`),
+  PRIMARY KEY (`userId`,`postId`),
   KEY `postId` (`postId`),
-  CONSTRAINT `postlike_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `User` (`userID`),
-  CONSTRAINT `postlike_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`)
+  CONSTRAINT `postlike_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userId`) ON DELETE CASCADE,
+  CONSTRAINT `postlike_ibfk_2` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -191,8 +136,8 @@ CREATE TABLE `PostTag` (
   `tagId` int(11) NOT NULL,
   PRIMARY KEY (`postId`,`tagId`),
   KEY `tagId` (`tagId`),
-  CONSTRAINT `posttag_ibfk_1` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`),
-  CONSTRAINT `posttag_ibfk_2` FOREIGN KEY (`tagId`) REFERENCES `Tag` (`tagId`)
+  CONSTRAINT `posttag_ibfk_1` FOREIGN KEY (`postId`) REFERENCES `Post` (`postId`) ON DELETE CASCADE,
+  CONSTRAINT `posttag_ibfk_2` FOREIGN KEY (`tagId`) REFERENCES `Tag` (`tagId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -236,18 +181,15 @@ DROP TABLE IF EXISTS `User`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `User` (
-  `userID` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `userId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email_confirmed_at` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `subscription` varchar(255) DEFAULT NULL,
-  `subscriptionStatus` varchar(255) DEFAULT NULL,
-  `subscriptionCreatedAt` datetime DEFAULT NULL,
-  `subscriptionEndAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`userID`)
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -269,12 +211,12 @@ DROP TABLE IF EXISTS `UserSetting`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `UserSetting` (
   `enrtyId` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(11) DEFAULT NULL,
+  `userId` bigint(20) DEFAULT NULL,
   `metaKey` varchar(255) DEFAULT NULL,
   `metaValue` text,
   PRIMARY KEY (`enrtyId`),
   KEY `userId` (`userId`),
-  CONSTRAINT `usersetting_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userID`)
+  CONSTRAINT `usersetting_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `User` (`userId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -286,6 +228,30 @@ LOCK TABLES `UserSetting` WRITE;
 /*!40000 ALTER TABLE `UserSetting` DISABLE KEYS */;
 /*!40000 ALTER TABLE `UserSetting` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `migrations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `filename` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (9,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710306193_CreateUserTable1.php'),(10,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710306523_CreatePostTable1.php'),(11,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710315404_CreateCommentTable1.php'),(12,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710315418_CreatePostLikeTable1.php'),(13,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710315429_CreateCategoryTable1.php'),(17,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710315439_CreateTagTable1.php'),(18,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710315452_CreatePostTagTable1.php'),(19,'/Applications/MAMP/htdocs/BlogBook/src/commands/programs/../../Database/Migrations/2024-03-13_1710315460_CreateUserSettingTable1.php');
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -296,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-13 15:59:55
+-- Dump completed on 2024-03-13 16:58:14
