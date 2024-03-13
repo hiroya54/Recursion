@@ -26,6 +26,8 @@ class CreatePostTable1 implements SchemaMigration
     public function down(): array
     {
         // ロールバックロジックを追加してください
-        return [];
+        return [
+            "DROP TABLE posts"
+        ];
     }
 }
