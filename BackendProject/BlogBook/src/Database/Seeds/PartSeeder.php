@@ -25,6 +25,7 @@ class PartSeeder extends AbstractSeeder {
         [
             'data_type' => 'int',
             'column_name' => 'quantityStock'
+
         ]
     ];
 
